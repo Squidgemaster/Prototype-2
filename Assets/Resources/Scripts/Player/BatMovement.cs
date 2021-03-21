@@ -10,17 +10,8 @@ public class BatMovement : MonoBehaviour
 
     public bool IsActive = false;
 
-    // Update is called once per frame
-    void Update()
-    {
-        //if (IsActive)
-        //{
-        //    if (transform.position.y > 30f)
-        //    {
-        //        transform.position = new Vector3(transform.position.x, 30f, transform.position.z);
-        //    }
-        //}
-    }
+    float turnSmoothTime = 1f;
+    float turnSmoothVel;
 
     private void FixedUpdate()
     {
@@ -32,15 +23,31 @@ public class BatMovement : MonoBehaviour
 
     private void MovePlayer()
     {
+        //float hor = Input.GetAxisRaw("Horizontal");
+        //float ver = Input.GetAxisRaw("Vertical");
+        //Vector3 direction = new Vector3(hor, 0f, ver).normalized;
+
+        //if (direction.magnitude >= 0.1f)
+        //{
+
+        //    Controller.Move(direction * Speed * Time.deltaTime);
+        //}
+
         float hor = Input.GetAxisRaw("Horizontal");
         float ver = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(hor, 0f, ver).normalized;
 
         if (direction.magnitude >= 0.1f)
         {
-            
-            Controller.Move(direction * Speed * Time.deltaTime);
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + MainCam.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVel, turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, angle, 0f);
+
+            Vector3 moveDir = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
+            Controller.Move(moveDir.normalized * Speed * Time.deltaTime);
         }
+
+
     }
 
     public void ActivateBat()
