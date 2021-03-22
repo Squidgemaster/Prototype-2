@@ -639,7 +639,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] blockSolidTable = new bool[1, 1, 1] { { { true } } };
 
         Vector3Int blockSolidOffset = new Vector3Int(0, 0, 0);
-        GridObjectData blockData = new GridObjectData(blockSolidTable, blockSolidOffset, true, true);
+        GridObjectData blockData = new GridObjectData(blockSolidTable, blockSolidOffset, false, true);
         Transform blockPrefab = Resources.Load<Transform>(PrefabPath + "Block");
 
         GridObjectTypes.Add("Block", new KeyValuePair<Transform, GridObjectData>(blockPrefab, blockData));
@@ -650,7 +650,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] rampSolidTable = new bool[1, 1, 1] { { { true } } };
 
         Vector3Int rampSolidOffset = new Vector3Int(0, 0, 0);
-        GridObjectData rampData = new GridObjectData(rampSolidTable, rampSolidOffset, true, true);
+        GridObjectData rampData = new GridObjectData(rampSolidTable, rampSolidOffset, false, true);
         Transform rampPrefab = Resources.Load<Transform>(PrefabPath + "Ramp");
 
         GridObjectTypes.Add("Ramp", new KeyValuePair<Transform, GridObjectData>(rampPrefab, rampData));
@@ -661,7 +661,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] pressurePlateSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int pressurePlateSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData pressurePlateData = new GridObjectData(pressurePlateSolidTable, pressurePlateSolidOffset, true, true);
+        GridObjectData pressurePlateData = new GridObjectData(pressurePlateSolidTable, pressurePlateSolidOffset, true, false);
         Transform pressurePlatePrefab = Resources.Load<Transform>(PrefabPath + "PressurePlate");
 
         GridObjectTypes.Add("Pressure Plate", new KeyValuePair<Transform, GridObjectData>(pressurePlatePrefab, pressurePlateData));
@@ -672,7 +672,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] blowerSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int blowerSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData blowerData = new GridObjectData(blowerSolidTable, blowerSolidOffset, true, true);
+        GridObjectData blowerData = new GridObjectData(blowerSolidTable, blowerSolidOffset, true, false);
         Transform blowerPrefab = Resources.Load<Transform>(PrefabPath + "Blower");
 
         GridObjectTypes.Add("Blower", new KeyValuePair<Transform, GridObjectData>(blowerPrefab, blowerData));
