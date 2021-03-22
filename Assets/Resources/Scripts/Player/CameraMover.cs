@@ -11,7 +11,21 @@ public class CameraMover : MonoBehaviour
     [SerializeField] private float Angle = 0f;
     [SerializeField] private float RotateSpeed = 5f;
     [SerializeField] private float ZoomSpeed = 3f;
-    [SerializeField] private bool Scroll = true;
+    [SerializeField] private float MaxRotation = 90f;
+    [SerializeField] private float MinRotation = 30f;
+    [SerializeField] private float MaxZoom = 30f;
+    [SerializeField] private float MinZoom = 5f;
+
+    bool hasLerped = false;
+    float newXAngle;
+    float newYAngle;
+    float tempDist;
+
+    private void Start()
+    {
+        newXAngle = Angle;
+        newYAngle = Height;
+    }
 
 
     // Update is called once per frame
@@ -28,15 +42,17 @@ public class CameraMover : MonoBehaviour
             return;
         }
 
-        Vector3 worldPosition = (Vector3.forward * -Distance) + (Vector3.up * Height);
+        Vector3 worldPosition = (Vector3.forward * -Distance);
 
-        Vector3 RotatedVec = Quaternion.AngleAxis(Angle, Vector3.up) * worldPosition;
+        Vector3 RotatedVec = Quaternion.AngleAxis(Angle, Vector3.up) * Quaternion.AngleAxis(Height, Vector3.right) * worldPosition;
+   
+
 
         Vector3 TargetPos = Target.position;
         //TargetPos.y = 0f;
 
         Vector3 finalPos = TargetPos + RotatedVec;
-
+ 
         transform.position = finalPos;
         transform.LookAt(TargetPos);
 
@@ -48,49 +64,76 @@ public class CameraMover : MonoBehaviour
         {
             if (Input.GetAxis("Mouse X") < 0)
             {
-                Angle += Time.deltaTime * RotateSpeed * 100f;
+
+                newXAngle -= Time.deltaTime * RotateSpeed;
+                Angle = Mathf.Lerp(Angle, newXAngle, 0.2f);
             }
             else if (Input.GetAxis("Mouse X") > 0)
             {
-                Angle -= Time.deltaTime * RotateSpeed * 100f;
+                newXAngle += Time.deltaTime * RotateSpeed;
+                Angle = Mathf.Lerp(Angle, newXAngle, 0.2f);
             }
 
 
-            if (!Scroll)
+
+            if (Input.GetAxis("Mouse Y") < 0)
             {
-                if (Input.GetAxis("Mouse Y") < 0)
+                newYAngle += Time.deltaTime * RotateSpeed;
+                Height = Mathf.Lerp(Height, newYAngle, 0.2f);
+                if (Height > MaxRotation)
                 {
-                    Height += Time.deltaTime * ZoomSpeed * 30f;
-                    if (Height > 50)
-                    {
-                        Height = 50f;
-                    }
-                }
-                else if (Input.GetAxis("Mouse Y") > 0)
-                {
-                    Height -= Time.deltaTime * ZoomSpeed * 30f;
-                    if (Height < -3)
-                    {
-                        Height = -3f;
-                    }
+                    Height = MaxRotation;
+                    newYAngle = Height;
                 }
             }
-        }
+            else if (Input.GetAxis("Mouse Y") > 0)
+            {
+                newYAngle -= Time.deltaTime * RotateSpeed;
+                Height = Mathf.Lerp(Height, newYAngle, 0.2f);
+                if (Height < -MinRotation)
+                {
+                    Height = -MinRotation;
+                    newYAngle = Height;
+                }
+            }
 
-        if (Scroll)
+
+
+            if (Height < 0 && !hasLerped)
+            {
+                tempDist = Distance;
+                StartCoroutine(LerpIn());
+                hasLerped = true;
+            }
+            else if (Height >= 0 && hasLerped)
+            {
+                StartCoroutine(LerpOut());
+                hasLerped = false;
+            }
+
+        }
+        
+            Distance *= (1.0f - (Input.mouseScrollDelta.y * ZoomSpeed));
+        if (Distance > MaxZoom)
         {
-            Height -= Input.mouseScrollDelta.y * ZoomSpeed;
-
-            if (Height > 50)
-            {
-                Height = 50f;
-            }
-            else if (Height < -3)
-            {
-                Height = -3f;
-            }
+            Distance = MaxZoom;
         }
+        else if (Distance < MinZoom)
+        {
+            Distance = MinZoom;
+        }
+    }
 
-        Distance = 10 + Height/2;
+    private IEnumerator LerpIn()
+    {
+        
+        Distance = Mathf.Lerp(Distance, 8, 0.1f);
+        yield return new WaitForSeconds(1f);
+    } 
+    
+    private IEnumerator LerpOut()
+    {
+        Distance = Mathf.Lerp(Distance, tempDist, 0.1f);
+        yield return new WaitForSeconds(1f);
     }
 }
