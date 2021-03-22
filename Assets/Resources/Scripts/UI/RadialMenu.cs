@@ -25,13 +25,13 @@ public class RadialMenu : MonoBehaviour
     public bool IsEnabled = true;
     public bool IsVisible = false;
     public string SelectedSegment = "";
+    public float Alpha = 0.0f;
 
     private GameObject[] Segments;
-    private float Alpha = 0.0f;
     private bool IsExited;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Initialize variables
         Segments = new GameObject[Items.Count];
@@ -96,15 +96,15 @@ public class RadialMenu : MonoBehaviour
             IsExited = false;
         }
 
-        if (IsVisible)
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            // Temporary
-            //Cursor.lockState = CursorLockMode.Locked;
-        }
+        //if (IsVisible)
+        //{
+        //    Cursor.lockState = CursorLockMode.None;
+        //}
+        //else
+        //{
+        //    // Temporary
+        //    //Cursor.lockState = CursorLockMode.Locked;
+        //}
     }
 
     private void UpdateAlpha()
