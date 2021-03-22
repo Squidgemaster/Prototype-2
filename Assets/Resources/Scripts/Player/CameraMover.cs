@@ -10,6 +10,8 @@ public class CameraMover : MonoBehaviour
     [SerializeField] private float Height = 30f;
     [SerializeField] private float Angle = 0f;
     [SerializeField] private float RotateSpeed = 5f;
+    [SerializeField] private float ZoomSpeed = 3f;
+    [SerializeField] private bool Scroll = true;
 
 
     // Update is called once per frame
@@ -31,7 +33,7 @@ public class CameraMover : MonoBehaviour
         Vector3 RotatedVec = Quaternion.AngleAxis(Angle, Vector3.up) * worldPosition;
 
         Vector3 TargetPos = Target.position;
-        TargetPos.y = 0f;
+        //TargetPos.y = 0f;
 
         Vector3 finalPos = TargetPos + RotatedVec;
 
@@ -54,6 +56,41 @@ public class CameraMover : MonoBehaviour
             }
 
 
+            if (!Scroll)
+            {
+                if (Input.GetAxis("Mouse Y") < 0)
+                {
+                    Height += Time.deltaTime * ZoomSpeed * 30f;
+                    if (Height > 50)
+                    {
+                        Height = 50f;
+                    }
+                }
+                else if (Input.GetAxis("Mouse Y") > 0)
+                {
+                    Height -= Time.deltaTime * ZoomSpeed * 30f;
+                    if (Height < -3)
+                    {
+                        Height = -3f;
+                    }
+                }
+            }
         }
+
+        if (Scroll)
+        {
+            Height -= Input.mouseScrollDelta.y * ZoomSpeed;
+
+            if (Height > 50)
+            {
+                Height = 50f;
+            }
+            else if (Height < -3)
+            {
+                Height = -3f;
+            }
+        }
+
+        Distance = 10 + Height/2;
     }
 }

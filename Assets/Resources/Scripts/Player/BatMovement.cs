@@ -10,7 +10,7 @@ public class BatMovement : MonoBehaviour
 
     public bool IsActive = false;
 
-    float turnSmoothTime = 1f;
+    float turnSmoothTime = 0f;
     float turnSmoothVel;
 
     private void FixedUpdate()
