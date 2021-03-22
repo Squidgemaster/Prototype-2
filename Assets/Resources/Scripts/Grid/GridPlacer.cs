@@ -141,6 +141,7 @@ public class GridPlacer : MonoBehaviour
         if (PlaceholderName != CurrentObject && PlaceholderObject != null)
         {
             Destroy(PlaceholderObject.gameObject);
+            PlaceholderDirection = EDirection.Right;
         }
 
         // Create a new placeholder object if it's null

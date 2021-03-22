@@ -131,7 +131,7 @@ public class RadialMenu : MonoBehaviour
                 angle = (angle + 360.0f) % 360.0f;
 
                 // Divide by the total number of items to retrieve the current one
-                currentNum = Mathf.FloorToInt((angle / (360.0f / Items.Count)));
+                currentNum = Mathf.Clamp(Mathf.FloorToInt((angle / (360.0f / Items.Count))), 0, Items.Count - 1);
 
                 // Get the angle of the segment
                 float segmentAngle = -Segments[currentNum].transform.localEulerAngles.y * Mathf.Deg2Rad;
