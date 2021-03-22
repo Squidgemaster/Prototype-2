@@ -49,13 +49,17 @@ public class GridPlacer : MonoBehaviour
     {
         // Retrieve the building from the radial parent
         CurrentObject = RadialParent.SelectedSegment;
-        CanBuild = !RadialParent.IsVisible;
+        CanBuild = (!RadialParent.IsVisible && RadialParent.IsEnabled);
 
         if (CanBuild && CurrentObject != "")
         {
             CheckForRotation();
             CheckForPlace();
             CheckForDestroy();
+        }
+        else if (PlaceholderObject != null)
+        {
+            Destroy(PlaceholderObject.gameObject);
         }
     }
 
@@ -111,7 +115,7 @@ public class GridPlacer : MonoBehaviour
         // Stopped placing something
         else if (PlaceholderObject != null)
         {
-            Destroy(PlaceholderObject);
+            Destroy(PlaceholderObject.gameObject);
         }
     }
 
@@ -141,20 +145,19 @@ public class GridPlacer : MonoBehaviour
         if (PlaceholderName != CurrentObject && PlaceholderObject != null)
         {
             Destroy(PlaceholderObject.gameObject);
-            PlaceholderDirection = EDirection.Right;
         }
 
         // Create a new placeholder object if it's null
-        if (PlaceholderObject == null)
+        if (PlaceholderObject == null && CurrentObject != "")
         {
             PlaceholderName = CurrentObject;
             PlaceholderData = Grid3D.GetObjectData(CurrentObject).Value;
 
             // Generate a copy of the object
-            PlaceholderObject = GameObject.Instantiate(Grid3D.GetObjectData(CurrentObject).Key);
+            PlaceholderObject = Instantiate(Grid3D.GetObjectData(CurrentObject).Key);
+            PlaceholderObject.rotation = Quaternion.AngleAxis((int)PlaceholderDirection * 90, Vector3.up);
             PlaceholderObject.name = CurrentObject + " (Placeholder)";
             PlaceholderObject.parent = transform;
-
             // Make transparent
             UpdateAllMaterials(PlaceholderObject.gameObject, PlaceholderMaterial);
             CullUnnecessaryComponents(PlaceholderObject.gameObject);

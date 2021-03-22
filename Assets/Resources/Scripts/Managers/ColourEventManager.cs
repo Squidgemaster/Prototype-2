@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColourEventSystem : MonoBehaviour
+public class ColourEventManager : MonoBehaviour
 {
     public struct ColourEvent
     {
