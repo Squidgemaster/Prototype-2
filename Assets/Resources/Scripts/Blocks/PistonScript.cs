@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PistonScript : MonoBehaviour
 {
@@ -14,7 +15,6 @@ public class PistonScript : MonoBehaviour
         Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
         ColourEventManager.ColourEvents["Red"].OnActivated += PistonScript_OnActivated;
     }
-
 
     private void PistonScript_OnActivated(object sender, System.EventArgs e)
     {

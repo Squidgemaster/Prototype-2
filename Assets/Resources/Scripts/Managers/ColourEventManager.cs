@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ColourEventManager : MonoBehaviour
 {
-    public struct ColourEvent
+    public class ColourEvent
     {
         // Is the colour currently active
         public bool IsActive;
@@ -46,7 +46,7 @@ public class ColourEventManager : MonoBehaviour
     public static Dictionary<string, ColourEvent> ColourEvents;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Make sure the events has no been already populated
         if (ColourEvents != null) { Debug.LogError("Multiple event systems within the same scene"); }
