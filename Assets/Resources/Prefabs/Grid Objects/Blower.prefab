@@ -48,6 +48,7 @@ MonoBehaviour:
   Enemies:
     serializedVersion: 2
     m_Bits: 4096
+  Power: 2000
 --- !u!136 &2189709509254342409
 CapsuleCollider:
   m_ObjectHideFlags: 0

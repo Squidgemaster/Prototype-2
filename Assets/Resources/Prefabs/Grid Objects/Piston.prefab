@@ -48,7 +48,7 @@ MonoBehaviour:
   Enemies:
     serializedVersion: 2
     m_Bits: 4096
-  FirePower: 100
+  FirePower: 1000
   Ani: {fileID: 1124800256984289131}
 --- !u!95 &1124800256984289131
 Animator:
