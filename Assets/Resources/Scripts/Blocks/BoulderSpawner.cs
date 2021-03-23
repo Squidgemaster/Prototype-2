@@ -11,7 +11,12 @@ public class BoulderSpawner : MonoBehaviour
     private void Start()
     {
         Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
-        ColourEventManager.ColourEvents[Colour].OnActivated += BoulderSpawner_OnActivated;
+        
+        if (Colour != "")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated += BoulderSpawner_OnActivated;
+        }
+        
         BoulderManager = Instantiate(Boulder, transform.position + new Vector3(0f, 1f, 0f), new Quaternion()) as GameObject;
     }
 

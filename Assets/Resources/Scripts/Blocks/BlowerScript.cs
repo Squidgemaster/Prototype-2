@@ -12,7 +12,11 @@ public class BlowerScript : MonoBehaviour
     private void Start()
     {
         Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
-        ColourEventManager.ColourEvents[Colour].OnActivated += BlowerScript_OnActivated;
+
+        if (Colour != "")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated += BlowerScript_OnActivated;
+        }
     }
 
     private void BlowerScript_OnActivated(object sender, System.EventArgs e)
@@ -39,7 +43,6 @@ public class BlowerScript : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            
                 bool isInArray = false;
 
                 for (int i = 0; i < EnemyArray.Length; i++)

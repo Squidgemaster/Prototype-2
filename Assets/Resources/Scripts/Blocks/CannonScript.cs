@@ -11,7 +11,11 @@ public class CannonScript : MonoBehaviour
     private void Start()
     {
         Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
-        ColourEventManager.ColourEvents[Colour].OnActivated += PistonScript_OnActivated;
+        
+        if (Colour != "")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated += PistonScript_OnActivated;
+        }
     }
 
     private void PistonScript_OnActivated(object sender, System.EventArgs e)

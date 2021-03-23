@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d244b538cd8382b4e9c937e1003f1651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsActive: 0
+  Colour: none
   Enemies:
     serializedVersion: 2
     m_Bits: 4096
@@ -82,15 +82,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e71f580c4519864e8b4637392f66769, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e71f580c4519864e8b4637392f66769, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e71f580c4519864e8b4637392f66769, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4e71f580c4519864e8b4637392f66769, type: 3}
       propertyPath: m_LocalRotation.w

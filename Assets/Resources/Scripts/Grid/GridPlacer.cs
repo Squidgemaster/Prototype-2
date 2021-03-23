@@ -217,6 +217,7 @@ public class GridPlacer : MonoBehaviour
             // Keep the mesh renderer and mesh filter components only
             if (!ReferenceEquals(component.GetType(), typeof(MeshRenderer)) &&
                 !ReferenceEquals(component.GetType(), typeof(MeshFilter)) &&
+                !ReferenceEquals(component.GetType(), typeof(SkinnedMeshRenderer)) &&
                 !ReferenceEquals(component.GetType(), typeof(Transform)))
             {
                 Destroy(component);
