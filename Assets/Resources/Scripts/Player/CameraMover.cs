@@ -16,10 +16,9 @@ public class CameraMover : MonoBehaviour
     [SerializeField] private float MaxZoom = 30f;
     [SerializeField] private float MinZoom = 5f;
 
-    bool hasLerped = false;
     float newXAngle;
     float newYAngle;
-    float tempDist;
+
 
     private void Start()
     {
@@ -97,23 +96,10 @@ public class CameraMover : MonoBehaviour
                 }
             }
 
-
-
-            if (Height < 0 && !hasLerped)
-            {
-                tempDist = Distance;
-                StartCoroutine(LerpIn());
-                hasLerped = true;
-            }
-            else if (Height >= 0 && hasLerped)
-            {
-                StartCoroutine(LerpOut());
-                hasLerped = false;
-            }
-
         }
         
-            Distance *= (1.0f - (Input.mouseScrollDelta.y * ZoomSpeed));
+        Distance *= (1.0f - (Input.mouseScrollDelta.y * ZoomSpeed));
+
         if (Distance > MaxZoom)
         {
             Distance = MaxZoom;
@@ -122,18 +108,5 @@ public class CameraMover : MonoBehaviour
         {
             Distance = MinZoom;
         }
-    }
-
-    private IEnumerator LerpIn()
-    {
-        
-        Distance = Mathf.Lerp(Distance, 8, 0.1f);
-        yield return new WaitForSeconds(1f);
-    } 
-    
-    private IEnumerator LerpOut()
-    {
-        Distance = Mathf.Lerp(Distance, tempDist, 0.1f);
-        yield return new WaitForSeconds(1f);
     }
 }
