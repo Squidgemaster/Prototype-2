@@ -11,12 +11,12 @@ public class ColourEventManager : MonoBehaviour
         public bool IsActive;
 
         // Called whenever a trigger is sent
-        public EventHandler OnActivated;
-        public EventHandler OnDeactivated;
+        public event EventHandler OnActivated;
+        public event EventHandler OnDeactivated;
 
         // These are not called when for example triggerActivated is called when it is already active
-        public EventHandler OnChangedActivation;
-        public EventHandler OnChangedDeactivation;
+        public event EventHandler OnChangedActivation;
+        public event EventHandler OnChangedDeactivation;
 
         // Trigger activation events
         public void TriggerActivated()
