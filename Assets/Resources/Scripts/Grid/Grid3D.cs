@@ -702,6 +702,17 @@ public class Grid3D : MonoBehaviour
 
         GridObjectTypes.Add("Piston", new KeyValuePair<Transform, GridObjectData>(pistonPrefab, pistonData));
         // -------------------------------------------------------------------------------------------------------
+        
+        // Boulder
+        // -------------------------------------------------------------------------------------------------------
+        bool[,,] boulderSolidTable = new bool[1, 1, 1] { { { true } } };
+        Vector3Int boulderSolidOffset = new Vector3Int(0, 0, 0);
+
+        GridObjectData boulderData = new GridObjectData(boulderSolidTable, boulderSolidOffset, true, false, 10);
+        Transform boulderPrefab = Resources.Load<Transform>(PrefabPath + "Boulder");
+
+        GridObjectTypes.Add("Boulder", new KeyValuePair<Transform, GridObjectData>(boulderPrefab, boulderData));
+        // -------------------------------------------------------------------------------------------------------
 
     }
 

@@ -14,9 +14,9 @@ public class PressurePlate : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            ColourEventManager.ColourEvents["Red"].TriggerActivated();
+            ColourEventManager.ColourEvents[Colour].TriggerActivated();
 
-            Debug.Log("Activated!");
+            Debug.Log(Colour + " Blocks Activated!");
         }
     }
 }
