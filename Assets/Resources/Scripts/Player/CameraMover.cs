@@ -76,11 +76,11 @@ public class CameraMover : MonoBehaviour
         if (Input.GetMouseButton(2))
         {
             // Update horizontal component
-            float targetHorizontal = TargetHorizontal + deltaPositon.x * Time.deltaTime * RotateSpeed;
+            float targetHorizontal = TargetHorizontal + deltaPositon.x * Time.unscaledDeltaTime * RotateSpeed;
             TargetHorizontal = Mathf.Lerp(TargetHorizontal, targetHorizontal, Smooth);
 
             // Update vertical component
-            float targetVertical = TargetVertical + -deltaPositon.y * Time.deltaTime * RotateSpeed;
+            float targetVertical = TargetVertical + -deltaPositon.y * Time.unscaledDeltaTime * RotateSpeed;
             targetVertical = Mathf.Clamp(targetVertical, MinRotation, MaxRotation);
             TargetVertical = Mathf.Lerp(TargetVertical, targetVertical, Smooth);
         }
