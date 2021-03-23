@@ -416,9 +416,9 @@ MonoBehaviour:
   Distance: 10
   Height: 30
   Angle: 0
-  RotateSpeed: 5
-  ZoomSpeed: 3
-  MaxRotation: 90
+  RotateSpeed: 100
+  ZoomSpeed: 0.1
+  MaxRotation: 89
   MinRotation: 30
   MaxZoom: 30
   MinZoom: 5
