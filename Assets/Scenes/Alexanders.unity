@@ -617,6 +617,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: 3D Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 746330445548427431, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
+      propertyPath: Smooth
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 1344930967721779539, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 8151
