@@ -22,6 +22,8 @@ public class BoulderSpawner : MonoBehaviour
 
     private void Activate()
     {
+        Destroy(BoulderManager);
+        BoulderManager = null;
         BoulderManager = Instantiate(Boulder, transform.position + new Vector3(0f, 1f, 0f), new Quaternion()) as GameObject;
     }
 }
