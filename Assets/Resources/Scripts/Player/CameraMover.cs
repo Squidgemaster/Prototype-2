@@ -81,7 +81,7 @@ public class CameraMover : MonoBehaviour
 
             // Update vertical component
             float targetVertical = TargetVertical + -deltaPositon.y * Time.deltaTime * RotateSpeed;
-            targetVertical = Mathf.Clamp(targetVertical, -MaxRotation, MaxRotation);
+            targetVertical = Mathf.Clamp(targetVertical, MinRotation, MaxRotation);
             TargetVertical = Mathf.Lerp(TargetVertical, targetVertical, Smooth);
         }
         
