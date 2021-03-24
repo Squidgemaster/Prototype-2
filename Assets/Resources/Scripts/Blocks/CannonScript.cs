@@ -18,6 +18,14 @@ public class CannonScript : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (Colour != "")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated -= CannonScript_OnActivated;
+        }
+    }
+
     private void CannonScript_OnActivated(object sender, System.EventArgs e)
     {
         Activate();

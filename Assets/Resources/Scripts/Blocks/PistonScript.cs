@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using System;
 
 public class PistonScript : MonoBehaviour
@@ -22,7 +23,10 @@ public class PistonScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        ColourEventManager.ColourEvents[Colour].OnActivated -= PistonScript_OnActivated;
+        if (Colour != "")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated -= PistonScript_OnActivated;
+        }
     }
 
     private void PistonScript_OnActivated(object sender, System.EventArgs e)
@@ -41,8 +45,10 @@ public class PistonScript : MonoBehaviour
 
         for (int i = 0; i < EnemiesInRange.Length; i++)
         {
-            EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.right * FirePower);
-            EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+            EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+            EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().AddForce(transform.right * FirePower);
+            EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
 
         Ani.SetTrigger("Attack");
