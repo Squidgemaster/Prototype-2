@@ -24,7 +24,10 @@ public class RadialMenu : MonoBehaviour
     [Header("Script Use")]
     public bool IsEnabled = true;
     public bool IsVisible = false;
+    
     public string SelectedSegment = "";
+    public int SelectedItem = -1;
+
     public float Alpha = 0.0f;
 
     private GameObject[] Segments;
@@ -153,11 +156,13 @@ public class RadialMenu : MonoBehaviour
                 Segments[currentNum].transform.localPosition += (target - current) * Time.unscaledDeltaTime * 10.0f;
 
                 // Update the selected material
+                SelectedItem = currentNum;
                 SelectedSegment = Items[currentNum].Name;
             }
             else
             {
                 // Cancel selected
+                SelectedItem = -1;
                 SelectedSegment = "";
             }
         }
