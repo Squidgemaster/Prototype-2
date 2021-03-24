@@ -3,20 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColourEventSystem : MonoBehaviour
+public class ColourEventManager : MonoBehaviour
 {
-    public struct ColourEvent
+    public class ColourEvent
     {
         // Is the colour currently active
         public bool IsActive;
 
         // Called whenever a trigger is sent
-        public EventHandler OnActivated;
-        public EventHandler OnDeactivated;
+        public event EventHandler OnActivated;
+        public event EventHandler OnDeactivated;
 
         // These are not called when for example triggerActivated is called when it is already active
-        public EventHandler OnChangedActivation;
-        public EventHandler OnChangedDeactivation;
+        public event EventHandler OnChangedActivation;
+        public event EventHandler OnChangedDeactivation;
 
         // Trigger activation events
         public void TriggerActivated()
@@ -46,7 +46,7 @@ public class ColourEventSystem : MonoBehaviour
     public static Dictionary<string, ColourEvent> ColourEvents;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Make sure the events has no been already populated
         if (ColourEvents != null) { Debug.LogError("Multiple event systems within the same scene"); }

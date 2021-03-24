@@ -5,26 +5,41 @@ using UnityEngine;
 public class CameraMover : MonoBehaviour
 {
 
-    [SerializeField] private Transform Target;
-    [SerializeField] private float Distance = 10f;
-    [SerializeField] private float Height = 30f;
-    [SerializeField] private float Angle = 0f;
-    [SerializeField] private float RotateSpeed = 5f;
-    [SerializeField] private float ZoomSpeed = 3f;
-    [SerializeField] private float MaxRotation = 90f;
-    [SerializeField] private float MinRotation = 30f;
-    [SerializeField] private float MaxZoom = 30f;
-    [SerializeField] private float MinZoom = 5f;
+    public Transform Target;
 
-    bool hasLerped = false;
-    float newXAngle;
-    float newYAngle;
-    float tempDist;
+    [Space(10)]
+    public float RotateSpeed = 5f;
+    public float ZoomSpeed = 3f;
+    public float Smooth = 0.3f;
+
+    [Space(10)]
+    public float MaxRotation = 90f;
+    public float MinRotation = 30f;
+
+    [Space(10)]
+    public float MaxZoom = 30f;
+    public float MinZoom = 5f;
+
+    private Vector3 LastMouseLocation;
+
+    private float TargetDistance = 10f;
+    private float TargetHorizontal;
+    private float TargetVertical;
+
+    private float CurrentDistance;
+    private float CurrentHorizontal;
+    private float CurrentVertical;
 
     private void Start()
     {
-        newXAngle = Angle;
-        newYAngle = Height;
+        LastMouseLocation = Input.mousePosition;
+
+        TargetHorizontal = 0.0f;
+        TargetVertical = 0.0f;
+
+        CurrentDistance = TargetDistance;
+        CurrentHorizontal = TargetHorizontal;
+        CurrentVertical = TargetVertical;
     }
 
 
@@ -37,103 +52,41 @@ public class CameraMover : MonoBehaviour
 
     void MoveCamera()
     {
-        if (!Target)
-        {
-            return;
-        }
+        if (!Target) { return; }
 
-        Vector3 worldPosition = (Vector3.forward * -Distance);
+        // Smooth lerp to target values
+        CurrentDistance = Mathf.Lerp(CurrentDistance, TargetDistance, Smooth);
+        CurrentHorizontal = Mathf.Lerp(CurrentHorizontal, TargetHorizontal, Smooth);
+        CurrentVertical = Mathf.Lerp(CurrentVertical, TargetVertical, Smooth);
 
-        Vector3 RotatedVec = Quaternion.AngleAxis(Angle, Vector3.up) * Quaternion.AngleAxis(Height, Vector3.right) * worldPosition;
-   
-
-
-        Vector3 TargetPos = Target.position;
-        //TargetPos.y = 0f;
-
-        Vector3 finalPos = TargetPos + RotatedVec;
- 
-        transform.position = finalPos;
-        transform.LookAt(TargetPos);
-
+        Vector3 worldPosition = (Vector3.forward * -CurrentDistance);
+        Vector3 RotatedVec = Quaternion.AngleAxis(CurrentHorizontal, Vector3.up) * Quaternion.AngleAxis(CurrentVertical, Vector3.right) * worldPosition;
+         
+        transform.position = Target.position + RotatedVec;
+        transform.LookAt(Target.position);
     }
 
     void RotateCamera()
     {
+        // Get delta position of mouse (avoids stiff movement)
+        Vector3 currentPositon = Input.mousePosition;
+        Vector3 deltaPositon = currentPositon - LastMouseLocation;
+        LastMouseLocation = currentPositon;
+
         if (Input.GetMouseButton(2))
         {
-            if (Input.GetAxis("Mouse X") < 0)
-            {
+            // Update horizontal component
+            float targetHorizontal = TargetHorizontal + deltaPositon.x * Time.unscaledDeltaTime * RotateSpeed;
+            TargetHorizontal = Mathf.Lerp(TargetHorizontal, targetHorizontal, Smooth);
 
-                newXAngle -= Time.deltaTime * RotateSpeed;
-                Angle = Mathf.Lerp(Angle, newXAngle, 0.2f);
-            }
-            else if (Input.GetAxis("Mouse X") > 0)
-            {
-                newXAngle += Time.deltaTime * RotateSpeed;
-                Angle = Mathf.Lerp(Angle, newXAngle, 0.2f);
-            }
-
-
-
-            if (Input.GetAxis("Mouse Y") < 0)
-            {
-                newYAngle += Time.deltaTime * RotateSpeed;
-                Height = Mathf.Lerp(Height, newYAngle, 0.2f);
-                if (Height > MaxRotation)
-                {
-                    Height = MaxRotation;
-                    newYAngle = Height;
-                }
-            }
-            else if (Input.GetAxis("Mouse Y") > 0)
-            {
-                newYAngle -= Time.deltaTime * RotateSpeed;
-                Height = Mathf.Lerp(Height, newYAngle, 0.2f);
-                if (Height < -MinRotation)
-                {
-                    Height = -MinRotation;
-                    newYAngle = Height;
-                }
-            }
-
-
-
-            if (Height < 0 && !hasLerped)
-            {
-                tempDist = Distance;
-                StartCoroutine(LerpIn());
-                hasLerped = true;
-            }
-            else if (Height >= 0 && hasLerped)
-            {
-                StartCoroutine(LerpOut());
-                hasLerped = false;
-            }
-
+            // Update vertical component
+            float targetVertical = TargetVertical + -deltaPositon.y * Time.unscaledDeltaTime * RotateSpeed;
+            targetVertical = Mathf.Clamp(targetVertical, MinRotation, MaxRotation);
+            TargetVertical = Mathf.Lerp(TargetVertical, targetVertical, Smooth);
         }
         
-            Distance *= (1.0f - (Input.mouseScrollDelta.y * ZoomSpeed));
-        if (Distance > MaxZoom)
-        {
-            Distance = MaxZoom;
-        }
-        else if (Distance < MinZoom)
-        {
-            Distance = MinZoom;
-        }
-    }
-
-    private IEnumerator LerpIn()
-    {
-        
-        Distance = Mathf.Lerp(Distance, 8, 0.1f);
-        yield return new WaitForSeconds(1f);
-    } 
-    
-    private IEnumerator LerpOut()
-    {
-        Distance = Mathf.Lerp(Distance, tempDist, 0.1f);
-        yield return new WaitForSeconds(1f);
+        // Update distance
+        TargetDistance *= (1.0f - (Input.mouseScrollDelta.y * ZoomSpeed));
+        TargetDistance = Mathf.Clamp(TargetDistance, MinZoom, MaxZoom);
     }
 }

@@ -20,13 +20,17 @@ public struct GridObjectData
     public bool MustBeSupported;
     public bool CanBeBuiltOn;
 
-    public GridObjectData(bool[,,] solidTable, Vector3Int solidOffset, bool mustBeSupported, bool canBeBuiltOn)
+    public int Cost;
+
+    public GridObjectData(bool[,,] solidTable, Vector3Int solidOffset, bool mustBeSupported, bool canBeBuiltOn, int cost)
     {
         SolidTiles = solidTable;
         SolidTilesOffset = solidOffset;
 
         MustBeSupported = mustBeSupported;
         CanBeBuiltOn = canBeBuiltOn;
+
+        Cost = cost;
 
         VerifySolidArray();
     }
@@ -184,6 +188,16 @@ public class GridTile
     GridObject Object;
 }
 
+public class BlockArgs : EventArgs
+{
+    public GridObjectData ObjectData;
+
+    public BlockArgs(GridObjectData data)
+    {
+        ObjectData = data;
+    }
+}
+
 public class Grid3D : MonoBehaviour
 {
     private static readonly string PrefabPath = "Prefabs/Grid Objects/";
@@ -201,8 +215,8 @@ public class Grid3D : MonoBehaviour
     public float TileSize;
 
     // Utility events
-    public event EventHandler OnTileAdded;
-    public event EventHandler OnTileRemoved;
+    public static event EventHandler<BlockArgs> OnTileAdded;
+    public static event EventHandler<BlockArgs> OnTileRemoved;
 
     // The world space dimensions
     private Vector3 WorldDimensions;
@@ -343,7 +357,7 @@ public class Grid3D : MonoBehaviour
             }
 
             // Invoke function
-            OnTileAdded?.Invoke(this, EventArgs.Empty);
+            OnTileAdded?.Invoke(this, new BlockArgs(objectData));
 
             // Finished placing object
             return true;
@@ -397,7 +411,7 @@ public class Grid3D : MonoBehaviour
                 Destroy(gridObject.Object.gameObject);
 
                 // Invoke function
-                OnTileRemoved?.Invoke(this, EventArgs.Empty);
+                OnTileRemoved?.Invoke(this, new BlockArgs(gridObject.ObjectData));
 
                 return true;
             }
@@ -637,9 +651,9 @@ public class Grid3D : MonoBehaviour
         // Block
         // -------------------------------------------------------------------------------------------------------
         bool[,,] blockSolidTable = new bool[1, 1, 1] { { { true } } };
-
         Vector3Int blockSolidOffset = new Vector3Int(0, 0, 0);
-        GridObjectData blockData = new GridObjectData(blockSolidTable, blockSolidOffset, false, true);
+
+        GridObjectData blockData = new GridObjectData(blockSolidTable, blockSolidOffset, false, true, 1);
         Transform blockPrefab = Resources.Load<Transform>(PrefabPath + "Block");
 
         GridObjectTypes.Add("Block", new KeyValuePair<Transform, GridObjectData>(blockPrefab, blockData));
@@ -648,9 +662,9 @@ public class Grid3D : MonoBehaviour
         // Ramp
         // -------------------------------------------------------------------------------------------------------
         bool[,,] rampSolidTable = new bool[1, 1, 1] { { { true } } };
-
         Vector3Int rampSolidOffset = new Vector3Int(0, 0, 0);
-        GridObjectData rampData = new GridObjectData(rampSolidTable, rampSolidOffset, false, true);
+
+        GridObjectData rampData = new GridObjectData(rampSolidTable, rampSolidOffset, false, true, 1);
         Transform rampPrefab = Resources.Load<Transform>(PrefabPath + "Ramp");
 
         GridObjectTypes.Add("Ramp", new KeyValuePair<Transform, GridObjectData>(rampPrefab, rampData));
@@ -661,7 +675,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] pressurePlateSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int pressurePlateSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData pressurePlateData = new GridObjectData(pressurePlateSolidTable, pressurePlateSolidOffset, true, false);
+        GridObjectData pressurePlateData = new GridObjectData(pressurePlateSolidTable, pressurePlateSolidOffset, true, false, 5);
         Transform pressurePlatePrefab = Resources.Load<Transform>(PrefabPath + "PressurePlate");
 
         GridObjectTypes.Add("Pressure Plate", new KeyValuePair<Transform, GridObjectData>(pressurePlatePrefab, pressurePlateData));
@@ -672,10 +686,32 @@ public class Grid3D : MonoBehaviour
         bool[,,] blowerSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int blowerSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData blowerData = new GridObjectData(blowerSolidTable, blowerSolidOffset, true, false);
+        GridObjectData blowerData = new GridObjectData(blowerSolidTable, blowerSolidOffset, true, false, 10);
         Transform blowerPrefab = Resources.Load<Transform>(PrefabPath + "Blower");
 
         GridObjectTypes.Add("Blower", new KeyValuePair<Transform, GridObjectData>(blowerPrefab, blowerData));
+        // -------------------------------------------------------------------------------------------------------
+        
+        // Piston
+        // -------------------------------------------------------------------------------------------------------
+        bool[,,] pistonSolidTable = new bool[1, 1, 1] { { { true } } };
+        Vector3Int pistonSolidOffset = new Vector3Int(0, 0, 0);
+
+        GridObjectData pistonData = new GridObjectData(pistonSolidTable, pistonSolidOffset, true, false, 10);
+        Transform pistonPrefab = Resources.Load<Transform>(PrefabPath + "Piston");
+
+        GridObjectTypes.Add("Piston", new KeyValuePair<Transform, GridObjectData>(pistonPrefab, pistonData));
+        // -------------------------------------------------------------------------------------------------------
+        
+        // Boulder
+        // -------------------------------------------------------------------------------------------------------
+        bool[,,] boulderSolidTable = new bool[1, 1, 1] { { { true } } };
+        Vector3Int boulderSolidOffset = new Vector3Int(0, 0, 0);
+
+        GridObjectData boulderData = new GridObjectData(boulderSolidTable, boulderSolidOffset, true, false, 10);
+        Transform boulderPrefab = Resources.Load<Transform>(PrefabPath + "Boulder");
+
+        GridObjectTypes.Add("Boulder", new KeyValuePair<Transform, GridObjectData>(boulderPrefab, boulderData));
         // -------------------------------------------------------------------------------------------------------
 
     }

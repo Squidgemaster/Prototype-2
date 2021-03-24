@@ -22,16 +22,16 @@ public class RadialMenu : MonoBehaviour
     public float AlphaMultiplier = 2.0f;
 
     [Header("Script Use")]
+    public bool IsEnabled = true;
     public bool IsVisible = false;
     public string SelectedSegment = "";
-
+    public float Alpha = 0.0f;
 
     private GameObject[] Segments;
-    private float Alpha = 0.0f;
     private bool IsExited;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         // Initialize variables
         Segments = new GameObject[Items.Count];
@@ -66,7 +66,16 @@ public class RadialMenu : MonoBehaviour
     // Update view
     public void Update()
     {
-        UpdateInput();
+        if (IsEnabled)
+        {
+            UpdateInput();
+        }
+        else
+        {
+            IsVisible = false;
+            IsExited = true;
+        }
+
         UpdateSegments();
         UpdateAlpha();
     }
@@ -87,21 +96,21 @@ public class RadialMenu : MonoBehaviour
             IsExited = false;
         }
 
-        if (IsVisible)
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            // Temporary
-            //Cursor.lockState = CursorLockMode.Locked;
-        }
+        //if (IsVisible)
+        //{
+        //    Cursor.lockState = CursorLockMode.None;
+        //}
+        //else
+        //{
+        //    // Temporary
+        //    //Cursor.lockState = CursorLockMode.Locked;
+        //}
     }
 
     private void UpdateAlpha()
     {
         // Update alpha value
-        Alpha += Time.deltaTime * AlphaMultiplier * (IsVisible ? 1.0f : -1.0f);
+        Alpha += Time.unscaledDeltaTime * AlphaMultiplier * (IsVisible ? 1.0f : -1.0f);
         Alpha = Mathf.Clamp(Alpha, 0.0f, 0.5f);
 
         // Update material
@@ -141,7 +150,7 @@ public class RadialMenu : MonoBehaviour
                 Vector3 current = Segments[currentNum].transform.localPosition;
 
                 // Move position towards the target
-                Segments[currentNum].transform.localPosition += (target - current) * Time.deltaTime * 10.0f;
+                Segments[currentNum].transform.localPosition += (target - current) * Time.unscaledDeltaTime * 10.0f;
 
                 // Update the selected material
                 SelectedSegment = Items[currentNum].Name;
@@ -160,7 +169,7 @@ public class RadialMenu : MonoBehaviour
             if (i != currentNum)
             {
                 // Bring back to the center
-                Segments[i].transform.localPosition = Segments[i].transform.localPosition * (1.0f - Time.deltaTime * 10.0f);
+                Segments[i].transform.localPosition = Segments[i].transform.localPosition * (1.0f - Time.unscaledDeltaTime * 10.0f);
             }
         }
     }
