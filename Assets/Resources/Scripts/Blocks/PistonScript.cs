@@ -5,7 +5,7 @@ using System;
 
 public class PistonScript : MonoBehaviour
 {
-    public string Colour = "none";
+    public string Colour = "";
     [SerializeField] private LayerMask Enemies;
     [SerializeField] private float FirePower = 100f;
     [SerializeField] private Animator Ani;
@@ -18,6 +18,11 @@ public class PistonScript : MonoBehaviour
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += PistonScript_OnActivated;
         }
+    }
+
+    private void OnDestroy()
+    {
+        ColourEventManager.ColourEvents[Colour].OnActivated -= PistonScript_OnActivated;
     }
 
     private void PistonScript_OnActivated(object sender, System.EventArgs e)
