@@ -32,6 +32,13 @@ public static class ConfigurableJointExtensions
 		var right = joint.axis;
 		var forward = Vector3.Cross (joint.axis, joint.secondaryAxis).normalized;
 		var up = Vector3.Cross (forward, right).normalized;
+
+		// Fixing "Look Rotation Viewing Vector Is Zero" message
+		if (forward == Vector3.zero)
+        {
+			forward = Vector3.one;
+        }
+
 		Quaternion worldToJointSpace = Quaternion.LookRotation (forward, up);
 		
 		// Transform into world space
@@ -68,7 +75,12 @@ public static class ConfigurableJointExtensions
 		
 		joint.rotationDriveMode = RotationDriveMode.Slerp;
 		var slerpDrive = joint.slerpDrive;
+
+		// Ignore obselete warning
+		#pragma warning disable CS0618
 		slerpDrive.mode = JointDriveMode.Position;
+		#pragma warning restore CS0618
+
 		slerpDrive.maximumForce = Mathf.Infinity;
 		joint.slerpDrive = slerpDrive;
 	}

@@ -10,27 +10,27 @@ public class EnemyAI : MonoBehaviour
     public List<ConfigurableJoint> RagdollJoints = new List<ConfigurableJoint>();
 
     private NavMeshAgent Agent;
-    private NavMeshManager MeshManager;
-    private Animator Anim;
 
-    // Pathfinding
-    //[Header("Pathfinding Properties")]
-    private Rigidbody RB;
-    private GameObject SpawnLocation;
+    [SerializeField] private GameObject AnimationObject;
+    [SerializeField] private GameObject PhysicalObject;
+    [SerializeField] private Rigidbody RagdollRoot;
 
-    private Vector3 StartLocation;
     private Vector3 FinishLocation;
 
-    // Debugging things
-    //[Header("Debugging")]
+    private bool RagdollActive;
 
     // Start is called before the first frame update
     void Start()
     {
-        //Agent = GetComponent<NavMeshAgent>();
-        //RB = GetComponent<Rigidbody>();
-        //Anim = GetComponent<Animator>();
+        Agent = GetComponent<NavMeshAgent>();
+
+        RagdollActive = false;
+        FinishLocation = new Vector3(0.0f, 0.0f, 0.0f);
+
         SetupRagdoll();
+
+        // Make enemy move to specified location
+        MoveToPosition(FinishLocation);
     }
 
     // Update is called once per frame
@@ -40,31 +40,42 @@ public class EnemyAI : MonoBehaviour
         #region Debug
         if (Input.GetMouseButtonDown(0))
         {
-
-        }
-
-        // Reset
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
+            ActivateRagdoll();
             Agent.ResetPath();
         }
         #endregion
-
     }
 
     private void FixedUpdate()
     {
-        UpdateJointTargetRotation();
+        if (!RagdollActive)
+        {
+            UpdateJointTargetRotation();
+        }
+    }
+
+    // Activates the ragdolling
+    public void ActivateRagdoll()
+    {
+        RagdollActive = true;
+        RagdollRoot.isKinematic = false;
+
+        JointDrive JD = new JointDrive();
+
+        foreach (ConfigurableJoint CJ in RagdollJoints)
+        {
+            CJ.angularXDrive = JD;
+        }
     }
 
     // Gets the ragdoll objects and their animation counterparts
     private void SetupRagdoll()
     {
-        // Get the two bodies of the ragdoll
-        GameObject AnimationObject = transform.Find("Animated").gameObject;
-        GameObject PhysicalObject = transform.Find("Physical").gameObject;
+        // Get the two bodies of the ragdoll if it isn't specified already
+        AnimationObject = AnimationObject == null ? transform.Find("Animated").gameObject : AnimationObject;
+        PhysicalObject = PhysicalObject == null ? transform.Find("Physical").gameObject : PhysicalObject;
 
-        // Get ragdoll colliders
+        // Get ragdoll joints
         foreach (ConfigurableJoint CJ in PhysicalObject.GetComponentsInChildren<ConfigurableJoint>())
         {
             // Ignore the parent game object colliders
@@ -92,7 +103,6 @@ public class EnemyAI : MonoBehaviour
         {
             JointInitialRotation.Add(CJ.transform.rotation);
         }
-
     }
 
     // Does what the name says
