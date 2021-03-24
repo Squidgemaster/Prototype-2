@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+
 
 public class LevelManager : MonoBehaviour
 {
     [Header("Dependancies")]
     public GameObject WinWindow;
+    public NavMeshSurface LevelNavMesh;
 
     [Space(10)]
     public TMPro.TMP_Text ResourcesTextbox;
@@ -29,7 +32,9 @@ public class LevelManager : MonoBehaviour
 
     [Header("Player Details")]
     public int CurrentResources;
-    public int CurrentScore; 
+    public int CurrentScore;
+
+    
 
     private bool IsPlaying;
     private bool HasStarted;
@@ -70,15 +75,18 @@ public class LevelManager : MonoBehaviour
     // Set whether the game is running or not
     public void SetIsPlaying(bool value)
     {
+        //Bake NavMesh
+        if (value == true)
+        LevelNavMesh.BuildNavMesh();
+
         // Reset score to 0
         UpdateScore(!HasStarted && value ? 0 : CurrentScore);
-
+        
         // One way toggle
         HasStarted = HasStarted || value;
 
         // Set store text colour
         ScoreTextbox.color = HasStarted ? (CurrentScore >= TargetScore ? HasReachedGoal : HasNotReachedGoal) : HasNotStarted;
-
 
         IsPlaying = value;
         Time.timeScale = IsPlaying ? 1.0f : 0.0f;

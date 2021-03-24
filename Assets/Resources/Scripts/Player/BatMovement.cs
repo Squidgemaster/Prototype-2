@@ -13,7 +13,7 @@ public class BatMovement : MonoBehaviour
     float turnSmoothTime = 0f;
     float turnSmoothVel;
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (IsActive)
         {
@@ -44,7 +44,7 @@ public class BatMovement : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, angle, 0f) * Vector3.forward;
-            Controller.Move(moveDir.normalized * Speed * Time.deltaTime);
+            transform.position += moveDir.normalized * Speed * Time.unscaledDeltaTime;
         }
 
 

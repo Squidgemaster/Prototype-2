@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,12 +6,11 @@ using UnityEngine;
 public class CameraMover : MonoBehaviour
 {
 
-    public Transform Target;
-
     [Space(10)]
     public float RotateSpeed = 5f;
     public float ZoomSpeed = 3f;
     public float Smooth = 0.3f;
+    public float MoveSpeed = 10f;
 
     [Space(10)]
     public float MaxRotation = 90f;
@@ -21,6 +21,7 @@ public class CameraMover : MonoBehaviour
     public float MinZoom = 5f;
 
     private Vector3 LastMouseLocation;
+    private Vector3 TargetPosition;
 
     private float TargetDistance = 10f;
     private float TargetHorizontal;
@@ -40,6 +41,8 @@ public class CameraMover : MonoBehaviour
         CurrentDistance = TargetDistance;
         CurrentHorizontal = TargetHorizontal;
         CurrentVertical = TargetVertical;
+
+        TargetPosition = Vector3.zero;
     }
 
 
@@ -52,7 +55,8 @@ public class CameraMover : MonoBehaviour
 
     void MoveCamera()
     {
-        if (!Target) { return; }
+        
+        HandleInput();
 
         // Smooth lerp to target values
         CurrentDistance = Mathf.Lerp(CurrentDistance, TargetDistance, Smooth);
@@ -62,8 +66,22 @@ public class CameraMover : MonoBehaviour
         Vector3 worldPosition = (Vector3.forward * -CurrentDistance);
         Vector3 RotatedVec = Quaternion.AngleAxis(CurrentHorizontal, Vector3.up) * Quaternion.AngleAxis(CurrentVertical, Vector3.right) * worldPosition;
          
-        transform.position = Target.position + RotatedVec;
-        transform.LookAt(Target.position);
+        transform.position = TargetPosition + RotatedVec;
+        transform.LookAt(TargetPosition);
+    }
+
+    private void HandleInput()
+    {
+        float hor = Input.GetAxisRaw("Horizontal");
+        float ver = Input.GetAxisRaw("Vertical");
+        Vector3 direction = new Vector3(hor, 0f, ver).normalized;
+
+        if (direction.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + CurrentHorizontal;
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            TargetPosition += moveDir.normalized * MoveSpeed * Time.unscaledDeltaTime;
+        }
     }
 
     void RotateCamera()
