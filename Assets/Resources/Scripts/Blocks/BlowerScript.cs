@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BlowerScript : MonoBehaviour
 {
-    string Colour = "none";
+    string Colour = "";
     [SerializeField] private LayerMask Enemies;
-    float Power = 100f;
+    public float Power = 500f;
     GameObject[] EnemyArray = new GameObject[20];
 
     private void Start()
