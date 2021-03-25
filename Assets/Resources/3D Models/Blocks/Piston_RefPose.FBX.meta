@@ -3,7 +3,12 @@ guid: 4e71f580c4519864e8b4637392f66769
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Piston4
+    second: {fileID: 5561349426305759274, guid: b8204c8173615a84da8d1bd656830f56, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
