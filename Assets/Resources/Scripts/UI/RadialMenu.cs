@@ -187,7 +187,7 @@ public class RadialMenu : MonoBehaviour
         List<int> indices = new List<int>();
 
         // The size of an angle of each triangle
-        float splitAngle = Mathf.Ceil(angle) / angle;
+        float splitAngle = angle / Mathf.Ceil(angle);
 
         for (int i = 0; i <= Mathf.Ceil(angle); i++)
         {

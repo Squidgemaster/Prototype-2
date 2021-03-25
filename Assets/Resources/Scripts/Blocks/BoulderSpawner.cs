@@ -29,10 +29,11 @@ public class BoulderSpawner : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Colour != "")
+        if (Colour != "" && Colour != "none")
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= BoulderSpawner_OnActivated;
         }
+        LevelManager.LevelRestartEvent -= LevelManager_LevelRestartEvent;
         Destroy(BoulderManager);
         BoulderManager = null;
     }

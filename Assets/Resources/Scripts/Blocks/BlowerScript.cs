@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BlowerScript : MonoBehaviour
 {
     string Colour = "";
     [SerializeField] private LayerMask Enemies;
     public float Power = 500f;
-    GameObject[] EnemyArray = new GameObject[20];
 
     private void Start()
     {
@@ -34,59 +34,75 @@ public class BlowerScript : MonoBehaviour
 
     private void Activate()
     {
-        if (EnemyArray.Length > 0)
+        Collider[] EnemiesInRange = Physics.OverlapSphere(transform.position + transform.forward * 3f, 1.1f, Enemies);
+
+        if (EnemiesInRange.Length > 0)
         {
-            for (int i = 0; i < EnemyArray.Length; i++)
+            for (int i = 0; i < EnemiesInRange.Length; i++)
             {
-                if (EnemyArray[i] != null)
+                    float distance = Vector3.Distance(transform.position, EnemiesInRange[i].transform.position);
+                    if (EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>() != null)
+                    {
+                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                    EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
+                    }
+                    else if (EnemiesInRange[i].gameObject.tag == "Boulder")
+                    {
+                    EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                    }
+                
+            }
+        }
+
+        EnemiesInRange = Physics.OverlapSphere(transform.position + transform.forward * 6f, 1.1f, Enemies);
+
+        if (EnemiesInRange.Length > 0)
+        {
+            for (int i = 0; i < EnemiesInRange.Length; i++)
+            {
+                float distance = Vector3.Distance(transform.position, EnemiesInRange[i].transform.position);
+                if (EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>() != null)
                 {
-                    float distance = Vector3.Distance(transform.position, EnemyArray[i].transform.position);
-                    EnemyArray[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                    EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
                 }
+                else if (EnemiesInRange[i].gameObject.tag == "Boulder")
+                {
+                    EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                }
+
+            }
+        }
+
+        EnemiesInRange = Physics.OverlapSphere(transform.position + transform.forward * 9f, 1.1f, Enemies);
+
+        if (EnemiesInRange.Length > 0)
+        {
+            for (int i = 0; i < EnemiesInRange.Length; i++)
+            {
+                float distance = Vector3.Distance(transform.position, EnemiesInRange[i].transform.position);
+                if (EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>() != null)
+                {
+                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                    EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
+                }
+                else if (EnemiesInRange[i].gameObject.tag == "Boulder")
+                {
+                    EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                }
+
             }
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnDrawGizmos()
     {
-        if (other.gameObject.tag == "Enemy")
-        {
-                bool isInArray = false;
-
-                for (int i = 0; i < EnemyArray.Length; i++)
-                {
-                    if (EnemyArray[i] == other.gameObject)
-                    {
-                        isInArray = true;
-                    }
-                }
-
-                if (!isInArray)
-                {
-                    for (int i = 0; i < EnemyArray.Length; i++)
-                    {
-                        if (EnemyArray[i] == null)
-                        {
-                            EnemyArray[i] = other.gameObject;
-                            break;
-                        }
-                    }
-                }
-            
-        }
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 3f, 1.1f);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 6f, 1.1f);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 9f, 1.1f);
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Enemy")
-        {
-            for (int i = 0; i < EnemyArray.Length; i++)
-            {
-                if (EnemyArray[i] != null && EnemyArray[i].gameObject == other.gameObject)
-                {
-                    EnemyArray[i] = null;
-                }
-            }
-        }
-    }
 }

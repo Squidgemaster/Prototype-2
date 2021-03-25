@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class CameraMover : MonoBehaviour
 {
-
     [Space(10)]
     public float RotateSpeed = 5f;
     public float ZoomSpeed = 3f;
-    public float Smooth = 0.3f;
     public float MoveSpeed = 10f;
+    public float Smooth = 0.3f;
 
     [Space(10)]
     public float MaxRotation = 90f;
@@ -20,54 +19,57 @@ public class CameraMover : MonoBehaviour
     public float MaxZoom = 30f;
     public float MinZoom = 5f;
 
-    private Vector3 LastMouseLocation;
-    private Vector3 TargetPosition;
+    private RadialMenu BuildingMenu;
+    private LevelManager MainLevelManager;
 
-    private float TargetDistance = 10f;
+    private Vector3 TargetFocusPosition;
+    private float TargetDistance;
     private float TargetHorizontal;
     private float TargetVertical;
 
+    private Vector3 CurrentFocusPosition;
     private float CurrentDistance;
     private float CurrentHorizontal;
     private float CurrentVertical;
 
     private void Start()
     {
-        LastMouseLocation = Input.mousePosition;
+        BuildingMenu = GameObject.Find("Radial Menu - Building").GetComponent<RadialMenu>();
+        MainLevelManager = GameObject.FindObjectOfType<LevelManager>();
 
+        TargetFocusPosition = Vector3.zero;
+        TargetDistance = 75.0f;
         TargetHorizontal = 0.0f;
-        TargetVertical = 0.0f;
+        TargetVertical = 45.0f;
 
+        CurrentFocusPosition = TargetFocusPosition;
         CurrentDistance = TargetDistance;
         CurrentHorizontal = TargetHorizontal;
         CurrentVertical = TargetVertical;
-
-        TargetPosition = Vector3.zero;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        MoveCamera();
+        HandleInput();
         RotateCamera();
+        MoveCamera();
     }
 
     void MoveCamera()
     {
-        
-        HandleInput();
-
         // Smooth lerp to target values
         CurrentDistance = Mathf.Lerp(CurrentDistance, TargetDistance, Smooth);
         CurrentHorizontal = Mathf.Lerp(CurrentHorizontal, TargetHorizontal, Smooth);
         CurrentVertical = Mathf.Lerp(CurrentVertical, TargetVertical, Smooth);
+        CurrentFocusPosition = Vector3.Lerp(CurrentFocusPosition, TargetFocusPosition, Smooth);
 
         Vector3 worldPosition = (Vector3.forward * -CurrentDistance);
         Vector3 RotatedVec = Quaternion.AngleAxis(CurrentHorizontal, Vector3.up) * Quaternion.AngleAxis(CurrentVertical, Vector3.right) * worldPosition;
          
-        transform.position = TargetPosition + RotatedVec;
-        transform.LookAt(TargetPosition);
+        transform.position = CurrentFocusPosition + RotatedVec;
+        transform.LookAt(CurrentFocusPosition);
     }
 
     private void HandleInput()
@@ -80,27 +82,32 @@ public class CameraMover : MonoBehaviour
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + CurrentHorizontal;
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            TargetPosition += moveDir.normalized * MoveSpeed * Time.unscaledDeltaTime;
+            TargetFocusPosition += moveDir.normalized * MoveSpeed * Time.unscaledDeltaTime;
         }
     }
 
     void RotateCamera()
     {
-        // Get delta position of mouse (avoids stiff movement)
-        Vector3 currentPositon = Input.mousePosition;
-        Vector3 deltaPositon = currentPositon - LastMouseLocation;
-        LastMouseLocation = currentPositon;
-
         if (Input.GetMouseButton(2))
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            BuildingMenu.IsEnabled = (!MainLevelManager.HasStarted && false);
+
+            Vector2 deltaPosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
             // Update horizontal component
-            float targetHorizontal = TargetHorizontal + deltaPositon.x * Time.unscaledDeltaTime * RotateSpeed;
+            float targetHorizontal = TargetHorizontal + deltaPosition.x * Time.unscaledDeltaTime * RotateSpeed;
             TargetHorizontal = Mathf.Lerp(TargetHorizontal, targetHorizontal, Smooth);
 
             // Update vertical component
-            float targetVertical = TargetVertical + -deltaPositon.y * Time.unscaledDeltaTime * RotateSpeed;
+            float targetVertical = TargetVertical + -deltaPosition.y * Time.unscaledDeltaTime * RotateSpeed;
             targetVertical = Mathf.Clamp(targetVertical, MinRotation, MaxRotation);
             TargetVertical = Mathf.Lerp(TargetVertical, targetVertical, Smooth);
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            BuildingMenu.IsEnabled = (!MainLevelManager.HasStarted && true);
         }
         
         // Update distance
