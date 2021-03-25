@@ -17,6 +17,13 @@ public class CannonScript : MonoBehaviour
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += CannonScript_OnActivated;
         }
+
+        LevelManager.LevelRestartEvent += LevelManager_LevelRestartEvent;
+    }
+
+    private void LevelManager_LevelRestartEvent(object sender, System.EventArgs e)
+    {
+        this.gameObject.GetComponent<SphereCollider>().enabled = true;
     }
 
     private void OnDestroy()

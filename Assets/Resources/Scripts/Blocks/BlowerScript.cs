@@ -45,13 +45,13 @@ public class BlowerScript : MonoBehaviour
                     float distance = Vector3.Distance(transform.position, EnemiesInRange[i].transform.position);
                     if (EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>() != null)
                     {
-                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
-                    EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
+                        EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                        EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                        EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
                     }
                     else if (EnemiesInRange[i].gameObject.tag == "Boulder")
                     {
-                    EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                        EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
                     }
                 
             }
