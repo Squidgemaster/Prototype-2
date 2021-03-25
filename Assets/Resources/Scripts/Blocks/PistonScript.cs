@@ -11,6 +11,8 @@ public class PistonScript : MonoBehaviour
     [SerializeField] private float FirePower = 100f;
     [SerializeField] private Animator Ani;
 
+    private FloatingTextManager FTM;
+
     private void Start()
     {
         Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
@@ -19,6 +21,8 @@ public class PistonScript : MonoBehaviour
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += PistonScript_OnActivated;
         }
+
+        FTM = FindObjectOfType<FloatingTextManager>();
     }
 
     private void OnDestroy()
@@ -50,6 +54,8 @@ public class PistonScript : MonoBehaviour
                 EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
                 EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
                 EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.right * FirePower, ForceMode.Impulse);
+                EnemiesInRange[i].GetComponentInParent<EnemyAI>().Score += 10;
+                FTM.CreateFloatingText(EnemiesInRange[i].GetComponentInParent<EnemyAI>().transform.position, "Normal", "OH MY GOD DID YOU JUST SMASH THAT POOR LAD WITH A GOD DAMN PISTON I'LL GIVE YOU A THUNDEROUS APPLUD AND AWARD YOU WITH 10 POINTS!!!");
             }
             else if (EnemiesInRange[i].gameObject.tag == "Boulder")
             {

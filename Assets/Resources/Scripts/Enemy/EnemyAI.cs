@@ -13,6 +13,8 @@ public class EnemyAI : MonoBehaviour
 
     public Transform EnemyTarget;
 
+    public int Score;
+
     [SerializeField] private GameObject AnimationObject;
     [SerializeField] private GameObject PhysicalObject;
     [SerializeField] private Rigidbody RagdollRoot;
@@ -55,10 +57,10 @@ public class EnemyAI : MonoBehaviour
     {
         // Debug tools
         #region Debug
-        if (Input.GetMouseButtonDown(0) && SceneManager.GetActiveScene().name == "Rui")
+        if (Input.GetKeyDown(KeyCode.P) && SceneManager.GetActiveScene().name == "Rui")
         {
             //ActivateRagdoll();
-            ApplyForceToRagdoll(new Vector3(1000.0f, 0.0f), ForceMode.Impulse, RagdollPart.LLeg);
+            //ApplyForceToRagdoll(new Vector3(1000.0f, 0.0f), ForceMode.Impulse, RagdollPart.LLeg);
             Agent.ResetPath();
         }
         #endregion
@@ -92,6 +94,13 @@ public class EnemyAI : MonoBehaviour
         {
             CJ.angularXDrive = JD;
         }
+
+        Destroy(gameObject, 10f);
+    }
+
+    private void OnDestroy()
+    {
+        FindObjectOfType<LevelManager>().AddScore(Score);
     }
 
     // Apply an impulse force to ragdoll (Pelvis by default)
