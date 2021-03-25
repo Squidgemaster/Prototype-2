@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public struct FloatingTextData
+public struct FloatingTextType
 {
     public string Animation;
-
-    public string Text;
     public Color TextColor;
-    public float Size;
+    public int FontSize;
 }
 
 
 public class FloatingTextManager : MonoBehaviour
 {
     public GameObject FloatingTextPrefab;
+
+
+    private Dictionary<string, FloatingTextType> FloatingTextTypes;
 
     private Camera MainCamera;
     private List<Transform> FloatingTexts;
@@ -24,6 +25,8 @@ public class FloatingTextManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GenerateTextTypes();
+
         ParentFloatingTexts = new GameObject().transform;
         ParentFloatingTexts.name = "Floating Text";
 
@@ -34,8 +37,12 @@ public class FloatingTextManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 camLocation = MainCamera.transform.position;
+        TestCode();
 
+
+        FloatingTexts.RemoveAll(item => item == null);
+
+        Vector3 camLocation = MainCamera.transform.position;
         foreach (Transform text in FloatingTexts)
         {
             // Point towards the camera location
@@ -45,15 +52,23 @@ public class FloatingTextManager : MonoBehaviour
 
     private void TestCode()
     {
-       // Screen.ray
+        if (Input.GetMouseButtonDown(0))
+        {
+            CreateFloatingText(Vector3.zero, "Normal", "Stuff");
+        }
     }
 
-    public void CreateFloatingText(Vector3 location, FloatingTextData data)
+    public void CreateFloatingText(Vector3 location, string type, string text)
     {
+        // Get the data from the dictionary
+        FloatingTextType data = FloatingTextTypes[type];
+
         // Create parent object (so that all animations are relative to this location)
         GameObject parent = new GameObject();
+        parent.name = text;
         parent.transform.parent = ParentFloatingTexts;
         parent.transform.position = location;
+        FloatingTexts.Add(parent.transform);
 
         // Instantiate a new floating text object
         GameObject floatingText = Instantiate(FloatingTextPrefab);
@@ -61,15 +76,32 @@ public class FloatingTextManager : MonoBehaviour
 
         // Rotate to face the camera
         Vector3 camLocation = MainCamera.transform.position;
-        floatingText.transform.rotation = Quaternion.LookRotation(floatingText.transform.position - camLocation);
+        parent.transform.rotation = Quaternion.LookRotation(parent.transform.position - camLocation);
 
         // Update text component
-        TMPro.TMP_Text text = floatingText.GetComponent<TMPro.TMP_Text>();
-        text.color = data.TextColor;
-        text.text = data.Text;
-        text.fontSize = data.Size;
+        TextMesh textMesh = floatingText.GetComponent<TextMesh>();
+        textMesh.color = data.TextColor;
+        textMesh.text = text;
+        textMesh.fontSize = data.FontSize;
 
         // Start playing animation
-        floatingText.GetComponent<Animator>().Play(data.Animation);
+        Animator anim = floatingText.GetComponent<Animator>();
+        anim.Play(data.Animation);
+
+        // Destroy once animation is complete
+        Destroy(parent, anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+    }
+
+    private void GenerateTextTypes()
+    {
+        FloatingTextTypes = new Dictionary<string, FloatingTextType>();
+
+        // Air time
+        FloatingTextType normalType = new FloatingTextType() {
+            Animation = "ScaleSmall",
+            FontSize = 20,
+            TextColor = Color.white };
+
+        FloatingTextTypes.Add("Normal", normalType);
     }
 }

@@ -22,7 +22,10 @@ public class PistonScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        ColourEventManager.ColourEvents[Colour].OnActivated -= PistonScript_OnActivated;
+        if (Colour != "" && Colour != "none")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated -= PistonScript_OnActivated;
+        }
     }
 
     private void PistonScript_OnActivated(object sender, System.EventArgs e)
