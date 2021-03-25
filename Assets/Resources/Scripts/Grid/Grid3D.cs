@@ -293,7 +293,7 @@ public class Grid3D : MonoBehaviour
     }
 
     // Create a grid object and add it to the tileset
-    public bool CreateGridObject(string objectName, Vector3Int tileLocation, EDirection direction)
+    public bool CreateGridObject(string objectName, Vector3Int tileLocation, EDirection direction, out GameObject placedObject)
     {
         // Get object data
         KeyValuePair<Transform, GridObjectData> data = GridObjectTypes[objectName];
@@ -360,11 +360,13 @@ public class Grid3D : MonoBehaviour
             OnTileAdded?.Invoke(this, new BlockArgs(objectData));
 
             // Finished placing object
+            placedObject = sceneObject.gameObject;
             return true;
         }
         else
         {
             // Object was not in bounds of the tile grid
+            placedObject = null;
             return false;
         }
     }
@@ -712,6 +714,17 @@ public class Grid3D : MonoBehaviour
         Transform boulderPrefab = Resources.Load<Transform>(PrefabPath + "Boulder");
 
         GridObjectTypes.Add("Boulder", new KeyValuePair<Transform, GridObjectData>(boulderPrefab, boulderData));
+        // -------------------------------------------------------------------------------------------------------  
+        
+        // Mortar
+        // -------------------------------------------------------------------------------------------------------
+        bool[,,] mortarSolidTable = new bool[1, 1, 1] { { { true } } };
+        Vector3Int mortarSolidOffset = new Vector3Int(0, 0, 0);
+
+        GridObjectData mortarData = new GridObjectData(mortarSolidTable, mortarSolidOffset, true, false, 10);
+        Transform mortarPrefab = Resources.Load<Transform>(PrefabPath + "Mortar");
+
+        GridObjectTypes.Add("Mortar", new KeyValuePair<Transform, GridObjectData>(mortarPrefab, mortarData));
         // -------------------------------------------------------------------------------------------------------
 
     }

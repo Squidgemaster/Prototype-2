@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BlowerScript : MonoBehaviour
 {
-    string Colour = "none";
+    string Colour = "";
     [SerializeField] private LayerMask Enemies;
     public float Power = 500f;
     GameObject[] EnemyArray = new GameObject[20];
@@ -16,6 +16,14 @@ public class BlowerScript : MonoBehaviour
         if (Colour != "")
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += BlowerScript_OnActivated;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Colour != "")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated -= BlowerScript_OnActivated;
         }
     }
 

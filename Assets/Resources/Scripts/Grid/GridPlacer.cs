@@ -15,6 +15,7 @@ public class GridPlacer : MonoBehaviour
     public bool CanBuild = true;
     public string CurrentObject = "";
     public RadialMenu RadialParent;
+    public RadialMenu ColourMenu;
 
     [Header("Properties")]
     public float BuildRange = 5.0f;
@@ -94,7 +95,16 @@ public class GridPlacer : MonoBehaviour
                     if (Input.GetMouseButtonDown(0))
                     {
                         // Place the selected object
-                        grid.CreateGridObject(CurrentObject, tileLoc, PlaceholderDirection);
+                        GameObject placedObject = null;
+                        bool successful = grid.CreateGridObject(CurrentObject, tileLoc, PlaceholderDirection, out placedObject);
+
+                        if (successful && ColourMenu.SelectedItem != -1)
+                        {
+                            // Update material to the colour selected from the radial menu
+                            Material colourMaterial = ColourEventManager.ColourMaterials[ColourMenu.SelectedSegment];
+                            UpdateAllMaterials(placedObject, colourMaterial); 
+                        }
+
                         break;
                     }
                     else
@@ -171,8 +181,6 @@ public class GridPlacer : MonoBehaviour
         Vector3 worldLocation = new Vector3();
         grid.TileToWorld(tileLocation, out worldLocation);
         PlaceholderObject.transform.position = worldLocation;
-
-        // Update rotation (TODO:)
 
         // Update visual
         PlaceholderObject.gameObject.SetActive(true);

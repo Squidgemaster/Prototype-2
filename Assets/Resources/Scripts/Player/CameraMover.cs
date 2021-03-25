@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,10 @@ using UnityEngine;
 public class CameraMover : MonoBehaviour
 {
 
-    public Transform Target;
-
     [Space(10)]
     public float RotateSpeed = 5f;
     public float ZoomSpeed = 3f;
+    public float MoveSpeed = 10f;
     public float Smooth = 0.3f;
 
     [Space(10)]
@@ -21,6 +21,7 @@ public class CameraMover : MonoBehaviour
     public float MinZoom = 5f;
 
     private Vector3 LastMouseLocation;
+    private Vector3 TargetPosition;
 
     private float TargetDistance = 10f;
     private float TargetHorizontal;
@@ -40,20 +41,21 @@ public class CameraMover : MonoBehaviour
         CurrentDistance = TargetDistance;
         CurrentHorizontal = TargetHorizontal;
         CurrentVertical = TargetVertical;
+
+        TargetPosition = Vector3.zero;
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        HandleInput();
         MoveCamera();
         RotateCamera();
     }
 
     void MoveCamera()
     {
-        if (!Target) { return; }
-
         // Smooth lerp to target values
         CurrentDistance = Mathf.Lerp(CurrentDistance, TargetDistance, Smooth);
         CurrentHorizontal = Mathf.Lerp(CurrentHorizontal, TargetHorizontal, Smooth);
@@ -62,27 +64,49 @@ public class CameraMover : MonoBehaviour
         Vector3 worldPosition = (Vector3.forward * -CurrentDistance);
         Vector3 RotatedVec = Quaternion.AngleAxis(CurrentHorizontal, Vector3.up) * Quaternion.AngleAxis(CurrentVertical, Vector3.right) * worldPosition;
          
-        transform.position = Target.position + RotatedVec;
-        transform.LookAt(Target.position);
+        transform.position = TargetPosition + RotatedVec;
+        transform.LookAt(TargetPosition);
+    }
+
+    private void HandleInput()
+    {
+        float hor = Input.GetAxisRaw("Horizontal");
+        float ver = Input.GetAxisRaw("Vertical");
+        Vector3 direction = new Vector3(hor, 0f, ver).normalized;
+
+        if (direction.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + CurrentHorizontal;
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            TargetPosition += moveDir.normalized * MoveSpeed * Time.unscaledDeltaTime;
+        }
     }
 
     void RotateCamera()
     {
         // Get delta position of mouse (avoids stiff movement)
-        Vector3 currentPositon = Input.mousePosition;
-        Vector3 deltaPositon = currentPositon - LastMouseLocation;
-        LastMouseLocation = currentPositon;
+        //Vector3 currentPositon = Input.mousePosition;
+        //Vector3 deltaPositon = currentPositon - LastMouseLocation;
+        //LastMouseLocation = currentPositon;
 
         if (Input.GetMouseButton(2))
         {
+            Cursor.lockState = CursorLockMode.Locked;
+
+            Vector2 deltaPosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
             // Update horizontal component
-            float targetHorizontal = TargetHorizontal + deltaPositon.x * Time.unscaledDeltaTime * RotateSpeed;
+            float targetHorizontal = TargetHorizontal + deltaPosition.x * Time.unscaledDeltaTime * RotateSpeed;
             TargetHorizontal = Mathf.Lerp(TargetHorizontal, targetHorizontal, Smooth);
 
             // Update vertical component
-            float targetVertical = TargetVertical + -deltaPositon.y * Time.unscaledDeltaTime * RotateSpeed;
+            float targetVertical = TargetVertical + -deltaPosition.y * Time.unscaledDeltaTime * RotateSpeed;
             targetVertical = Mathf.Clamp(targetVertical, MinRotation, MaxRotation);
             TargetVertical = Mathf.Lerp(TargetVertical, targetVertical, Smooth);
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
         }
         
         // Update distance

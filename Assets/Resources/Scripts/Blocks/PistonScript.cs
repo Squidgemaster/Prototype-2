@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using System;
 
 public class PistonScript : MonoBehaviour
 {
-    public string Colour = "none";
+    public string Colour = "";
     [SerializeField] private LayerMask Enemies;
     [SerializeField] private float FirePower = 100f;
     [SerializeField] private Animator Ani;
@@ -17,6 +18,14 @@ public class PistonScript : MonoBehaviour
         if (Colour != "")
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += PistonScript_OnActivated;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Colour != "" && Colour != "none")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated -= PistonScript_OnActivated;
         }
     }
 
@@ -36,8 +45,10 @@ public class PistonScript : MonoBehaviour
 
         for (int i = 0; i < EnemiesInRange.Length; i++)
         {
-            EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.right * FirePower);
-            EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+            EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+            EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().AddForce(transform.right * FirePower);
+            EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().constraints = RigidbodyConstraints.None;
         }
 
         Ani.SetTrigger("Attack");
