@@ -10,16 +10,15 @@ public class EnemyAI : MonoBehaviour
     public List<GameObject> AnimationObjects = new List<GameObject>();
     public List<Rigidbody> RagdollRigidbodies = new List<Rigidbody>();
     public List<ConfigurableJoint> RagdollJoints = new List<ConfigurableJoint>();
-    public Transform EnemyTarget;
 
-    private NavMeshAgent Agent;
+    public Transform EnemyTarget;
 
     [SerializeField] private GameObject AnimationObject;
     [SerializeField] private GameObject PhysicalObject;
     [SerializeField] private Rigidbody RagdollRoot;
 
+    private NavMeshAgent Agent;
     private Vector3 FinishLocation;
-
     private bool RagdollActive;
 
     public enum RagdollPart
@@ -59,7 +58,7 @@ public class EnemyAI : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && SceneManager.GetActiveScene().name == "Rui")
         {
             //ActivateRagdoll();
-            ApplyForceToRagdoll(new Vector3(20.0f, 10.0f), ForceMode.Impulse, RagdollPart.LLeg);
+            ApplyForceToRagdoll(new Vector3(1000.0f, 0.0f), ForceMode.Impulse, RagdollPart.LLeg);
             Agent.ResetPath();
         }
         #endregion
@@ -72,6 +71,14 @@ public class EnemyAI : MonoBehaviour
             UpdateJointTargetRotation();
         }
     }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.name != "Ground")
+    //    {
+    //        other.attachedRigidbody.
+    //    }
+    //}
 
     // Activates the ragdolling
     public void ActivateRagdoll()
