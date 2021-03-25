@@ -51,7 +51,7 @@ public class PistonScript : MonoBehaviour
                 EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
                 EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.right * FirePower, ForceMode.Impulse);
             }
-            else
+            else if (EnemiesInRange[i].gameObject.tag == "Boulder")
             {
                 EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().AddForce(transform.right * FirePower);
             }

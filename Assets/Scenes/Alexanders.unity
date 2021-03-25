@@ -108,7 +108,7 @@ NavMeshSettings:
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
-    agentSlope: 45
+    agentSlope: 60
     agentClimb: 0.4
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
@@ -768,6 +768,26 @@ PrefabInstance:
       propertyPath: Smooth
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 746330445548427431, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
+      propertyPath: MaxZoom
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 746330445548427431, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
+      propertyPath: MinZoom
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 746330445548427431, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
+      propertyPath: MoveSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 746330445548427431, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
+      propertyPath: MinRotation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 746330445548427431, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
+      propertyPath: RotateSpeed
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 1344930967371502959, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
       propertyPath: m_LocalPosition.y
       value: 15
@@ -822,7 +842,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5108284266649160973, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
       propertyPath: SegmentIcons.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5108284266649160973, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
       propertyPath: SegmentIcons.Array.data[0]
@@ -848,6 +868,10 @@ PrefabInstance:
       propertyPath: SegmentIcons.Array.data[5]
       value: 
       objectReference: {fileID: 21300000, guid: 76beab3700689e347b247435184325e6, type: 3}
+    - target: {fileID: 5108284266649160973, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
+      propertyPath: SegmentIcons.Array.data[6]
+      value: 
+      objectReference: {fileID: 21300000, guid: cc9c23f4fbcf30543a1fffe2acd537e5, type: 3}
     - target: {fileID: 8458571321649528489, guid: 4490b852ce7db8d4e8d486a9534f73b5, type: 3}
       propertyPath: Items.Array.size
       value: 7
