@@ -8,9 +8,11 @@ public class BlowerScript : MonoBehaviour
     string Colour = "";
     [SerializeField] private LayerMask Enemies;
     public float Power = 500f;
+    private Animator BlowerAni;
 
     private void Start()
     {
+        BlowerAni = this.gameObject.GetComponentInChildren<Animator>();
         Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
 
         if (Colour != "")
@@ -68,6 +70,12 @@ public class BlowerScript : MonoBehaviour
                     EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
                     EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
                 }
+                else if (EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<EnemyAI>() != null)
+                {
+                    EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                    EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                    EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
+                }
                 else if (EnemiesInRange[i].gameObject.tag == "Boulder")
                 {
                     EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
@@ -96,6 +104,8 @@ public class BlowerScript : MonoBehaviour
 
             }
         }
+
+        BlowerAni.SetTrigger("IsActive");
     }
 
     private void OnDrawGizmos()
