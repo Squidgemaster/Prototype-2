@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 98a318dbbc7463a48a7e9cf33dab6964
+guid: 0d60d52444aff6e439d7950ca75d9dca
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blower1
+    second: {fileID: 2100000, guid: 69f01b6a129b9e946bca0853e8e8b3e3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
