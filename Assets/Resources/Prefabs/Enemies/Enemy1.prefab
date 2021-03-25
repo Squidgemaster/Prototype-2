@@ -1530,6 +1530,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 449030949833368750, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 40da63249b32bcc42a1450540c46ffce, type: 2}
+    - target: {fileID: 449030949833368750, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 40da63249b32bcc42a1450540c46ffce, type: 2}
     - target: {fileID: 919132149155446097, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
       propertyPath: m_Name
       value: Physical
