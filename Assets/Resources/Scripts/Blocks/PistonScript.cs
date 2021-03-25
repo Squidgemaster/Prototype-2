@@ -45,7 +45,7 @@ public class PistonScript : MonoBehaviour
 
     private void Activate()
     {
-        Collider[] EnemiesInRange = Physics.OverlapSphere(transform.position + transform.right *3f, 1.4f, Enemies);
+        Collider[] EnemiesInRange = Physics.OverlapSphere(transform.position + transform.right *3f, 1.2f, Enemies);
 
         for (int i = 0; i < EnemiesInRange.Length; i++)
         {

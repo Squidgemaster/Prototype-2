@@ -51,6 +51,7 @@ MonoBehaviour:
   RagdollRigidbodies: []
   RagdollJoints: []
   EnemyTarget: {fileID: 0}
+  Score: 0
   AnimationObject: {fileID: 1110724612076590972}
   PhysicalObject: {fileID: 1110724612280304352}
   RagdollRoot: {fileID: 264445705301733395}
@@ -1577,7 +1578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2042341376137094634, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
       propertyPath: m_TagString
-      value: Enemy
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 3085253126862275168, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
       propertyPath: m_Layer
@@ -1649,7 +1650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7377939625297789190, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
       propertyPath: m_TagString
-      value: Enemy
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 7800964082130351388, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
       propertyPath: m_Layer

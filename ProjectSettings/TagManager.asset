@@ -8,6 +8,7 @@ TagManager:
   - Grid
   - Manager
   - Enemy
+  - Boulder
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Ground
   - Player
   - Enemies
-  - 
+  - Non-Collider
   - 
   - 
   - 

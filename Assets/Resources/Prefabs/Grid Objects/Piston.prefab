@@ -49,7 +49,7 @@ MonoBehaviour:
   Enemies:
     serializedVersion: 2
     m_Bits: 4096
-  FirePower: 1000
+  FirePower: 200
   Ani: {fileID: 1124800256984289131}
 --- !u!65 &5786300969088279636
 BoxCollider:
