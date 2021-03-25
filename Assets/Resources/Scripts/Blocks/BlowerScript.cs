@@ -19,6 +19,14 @@ public class BlowerScript : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (Colour != "")
+        {
+            ColourEventManager.ColourEvents[Colour].OnActivated -= BlowerScript_OnActivated;
+        }
+    }
+
     private void BlowerScript_OnActivated(object sender, System.EventArgs e)
     {
         Activate();

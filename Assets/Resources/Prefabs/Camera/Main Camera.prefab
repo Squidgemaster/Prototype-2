@@ -169,6 +169,7 @@ MonoBehaviour:
   IsEnabled: 1
   IsVisible: 0
   SelectedSegment: 
+  SelectedItem: -1
   Alpha: 0
 --- !u!114 &5234862290592590703
 MonoBehaviour:
@@ -264,7 +265,7 @@ MonoBehaviour:
   Items:
   - Name: Red
     Material: {fileID: 2100000, guid: 5232c374b3ebca64a981776457a2077a, type: 2}
-  - Name: Green
+  - Name: Purple
     Material: {fileID: 2100000, guid: f2c44d92d92d4d44aaefabfbedde7ea1, type: 2}
   - Name: Blue
     Material: {fileID: 2100000, guid: a6872f767fada824a8e1e0e85bb7d75d, type: 2}
@@ -280,6 +281,7 @@ MonoBehaviour:
   IsEnabled: 1
   IsVisible: 0
   SelectedSegment: 
+  SelectedItem: -1
   Alpha: 0
 --- !u!1 &8873027158464078683
 GameObject:
@@ -412,12 +414,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d25813d5dbbe04d94e9da3f9bb0691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 0}
-  Distance: 10
-  Height: 30
-  Angle: 0
   RotateSpeed: 100
   ZoomSpeed: 0.1
+  Smooth: 0.3
+  MoveSpeed: 10
   MaxRotation: 89
   MinRotation: 30
   MaxZoom: 30

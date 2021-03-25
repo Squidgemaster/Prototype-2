@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5496083375263674050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5496083375263674052}
+  - component: {fileID: 5496083375263674053}
+  m_Layer: 0
+  m_Name: Level Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5496083375263674052
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5496083375263674050}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5496083375263674053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5496083375263674050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b05d7109fa8d1042bc79000c611a6a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WinWindow: {fileID: 0}
+  ResourcesTextbox: {fileID: 0}
+  ScoreTextbox: {fileID: 0}
+  TargetScoreTextbox: {fileID: 0}
+  PlayButton: {fileID: 0}
+  PlaySprite: {fileID: 21300000, guid: 3c839ebfcae4db0478dfdaea0daafecb, type: 3}
+  PauseSprite: {fileID: 21300000, guid: 8c0d5cae4d26e714b95aa9576379e367, type: 3}
+  ColourMenu: {fileID: 0}
+  BuildingMenu: {fileID: 0}
+  GridPlacer: {fileID: 0}
+  EnemyPrefab: {fileID: 2346254782472465288, guid: a9f773f2fd3a75647bb17a949f82f7c9, type: 3}
+  TotalResources: 100
+  TargetScore: 100
+  CurrentResources: 0
+  CurrentScore: 0

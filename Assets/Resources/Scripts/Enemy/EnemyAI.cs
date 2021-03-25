@@ -8,6 +8,7 @@ public class EnemyAI : MonoBehaviour
     public List<GameObject> AnimationObjects = new List<GameObject>();
     public List<Quaternion> JointInitialRotation = new List<Quaternion>();
     public List<ConfigurableJoint> RagdollJoints = new List<ConfigurableJoint>();
+    public Transform EnemyTarget;
 
     private NavMeshAgent Agent;
 
@@ -25,7 +26,7 @@ public class EnemyAI : MonoBehaviour
         Agent = GetComponent<NavMeshAgent>();
 
         RagdollActive = false;
-        FinishLocation = new Vector3(0.0f, 0.0f, 0.0f);
+        FinishLocation = EnemyTarget.position;
 
         SetupRagdoll();
 
@@ -37,13 +38,13 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         // Debug tools
-        #region Debug
-        if (Input.GetMouseButtonDown(0))
-        {
-            ActivateRagdoll();
-            Agent.ResetPath();
-        }
-        #endregion
+        //#region Debug
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    ActivateRagdoll();
+        //    Agent.ResetPath();
+        //}
+        //#endregion
     }
 
     private void FixedUpdate()

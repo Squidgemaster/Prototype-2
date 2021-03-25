@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 738552160884126477}
   - component: {fileID: 738552160884126476}
   - component: {fileID: 738552160884126479}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -64,6 +64,7 @@ MonoBehaviour:
   CanBuild: 1
   CurrentObject: 
   RadialParent: {fileID: 0}
+  ColourMenu: {fileID: 0}
   BuildRange: 999999
   RayMode: 0
   PlaceholderMaterial: {fileID: 2100000, guid: 3ebfa810e7e50f64cb923e5d6bea5553, type: 2}
