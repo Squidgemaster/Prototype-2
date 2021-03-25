@@ -35,10 +35,10 @@ public class LevelManager : MonoBehaviour
     public int CurrentResources;
     public int CurrentScore;
 
-    
+    [Header("Script Use")]
+    public bool IsPlaying;
+    public bool HasStarted;
 
-    private bool IsPlaying;
-    private bool HasStarted;
     private Transform ParentEnemy;
 
     // Score colours
