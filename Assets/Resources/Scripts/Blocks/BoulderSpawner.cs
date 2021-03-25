@@ -29,7 +29,7 @@ public class BoulderSpawner : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Colour != "")
+        if (Colour != "" && Colour != "none")
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= BoulderSpawner_OnActivated;
         }

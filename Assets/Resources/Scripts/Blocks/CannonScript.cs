@@ -20,7 +20,7 @@ public class CannonScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Colour != "")
+        if (Colour != "" && Colour != "none")
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= CannonScript_OnActivated;
         }

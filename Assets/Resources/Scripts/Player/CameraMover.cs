@@ -21,12 +21,13 @@ public class CameraMover : MonoBehaviour
     public float MinZoom = 5f;
 
     private Vector3 LastMouseLocation;
-    private Vector3 TargetPosition;
 
-    private float TargetDistance = 10f;
+    private Vector3 TargetFocusPosition;
+    private float TargetDistance;
     private float TargetHorizontal;
     private float TargetVertical;
 
+    private Vector3 CurrentFocusPosition;
     private float CurrentDistance;
     private float CurrentHorizontal;
     private float CurrentVertical;
@@ -35,14 +36,15 @@ public class CameraMover : MonoBehaviour
     {
         LastMouseLocation = Input.mousePosition;
 
+        TargetFocusPosition = Vector3.zero;
+        TargetDistance = 75.0f;
         TargetHorizontal = 0.0f;
-        TargetVertical = 0.0f;
+        TargetVertical = 45.0f;
 
+        CurrentFocusPosition = TargetFocusPosition;
         CurrentDistance = TargetDistance;
         CurrentHorizontal = TargetHorizontal;
         CurrentVertical = TargetVertical;
-
-        TargetPosition = Vector3.zero;
     }
 
 
@@ -50,8 +52,8 @@ public class CameraMover : MonoBehaviour
     void Update()
     {
         HandleInput();
-        MoveCamera();
         RotateCamera();
+        MoveCamera();
     }
 
     void MoveCamera()
@@ -60,12 +62,13 @@ public class CameraMover : MonoBehaviour
         CurrentDistance = Mathf.Lerp(CurrentDistance, TargetDistance, Smooth);
         CurrentHorizontal = Mathf.Lerp(CurrentHorizontal, TargetHorizontal, Smooth);
         CurrentVertical = Mathf.Lerp(CurrentVertical, TargetVertical, Smooth);
+        CurrentFocusPosition = Vector3.Lerp(CurrentFocusPosition, TargetFocusPosition, Smooth);
 
         Vector3 worldPosition = (Vector3.forward * -CurrentDistance);
         Vector3 RotatedVec = Quaternion.AngleAxis(CurrentHorizontal, Vector3.up) * Quaternion.AngleAxis(CurrentVertical, Vector3.right) * worldPosition;
          
-        transform.position = TargetPosition + RotatedVec;
-        transform.LookAt(TargetPosition);
+        transform.position = CurrentFocusPosition + RotatedVec;
+        transform.LookAt(CurrentFocusPosition);
     }
 
     private void HandleInput()
@@ -78,16 +81,12 @@ public class CameraMover : MonoBehaviour
         {
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + CurrentHorizontal;
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            TargetPosition += moveDir.normalized * MoveSpeed * Time.unscaledDeltaTime;
+            TargetFocusPosition += moveDir.normalized * MoveSpeed * Time.unscaledDeltaTime;
         }
     }
 
     void RotateCamera()
     {
-        // Get delta position of mouse (avoids stiff movement)
-        //Vector3 currentPositon = Input.mousePosition;
-        //Vector3 deltaPositon = currentPositon - LastMouseLocation;
-        //LastMouseLocation = currentPositon;
 
         if (Input.GetMouseButton(2))
         {
