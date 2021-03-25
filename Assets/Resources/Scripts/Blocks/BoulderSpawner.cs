@@ -33,6 +33,7 @@ public class BoulderSpawner : MonoBehaviour
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= BoulderSpawner_OnActivated;
         }
+        LevelManager.LevelRestartEvent -= LevelManager_LevelRestartEvent;
         Destroy(BoulderManager);
         BoulderManager = null;
     }

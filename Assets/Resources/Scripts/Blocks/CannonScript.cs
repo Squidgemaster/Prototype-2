@@ -38,7 +38,7 @@ public class CannonScript : MonoBehaviour
         this.gameObject.GetComponent<SphereCollider>().enabled = false;
         for (int i = 0; i < Enemies.Length; i++)
         {
-            if (Enemies[i] != null)
+            if (Enemies[i] != null && Enemies[i].gameObject.GetComponentInParent<EnemyAI>() != null)
             {
                 Enemies[i].transform.parent.gameObject.SetActive(true);
                 Enemies[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
@@ -46,6 +46,10 @@ public class CannonScript : MonoBehaviour
                 Enemies[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll((transform.forward + transform.up) * Power, ForceMode.Impulse);
 
                 Enemies[i] = null;
+            }
+            else if (Enemies[i].gameObject.tag == "Boulder")
+            {
+                Enemies[i].gameObject.GetComponent<Rigidbody>().AddForce((transform.forward + transform.up) * Power);
             }
         } 
     }
@@ -57,16 +61,13 @@ public class CannonScript : MonoBehaviour
 
     private IEnumerator DelayedReset()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         Deactivate();
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Enemy")
         {
-            //Vector3 direction = transform.position - other.transform.position;
-            //other.gameObject.GetComponent<Rigidbody>().AddForce(direction.normalized * Power);
-
             //add gameobject to array of objects  to store in the cannon
             bool isInArray = false;
             //check if this object already exists in the array
@@ -86,6 +87,34 @@ public class CannonScript : MonoBehaviour
                     {
                         Enemies[i] = other.gameObject as GameObject;
                         other.gameObject.transform.parent.gameObject.SetActive(false);
+                        break;
+                    }
+                }
+            }
+        }
+
+        else if (other.gameObject.tag == "Boulder")
+        {
+
+            //add gameobject to array of objects  to store in the cannon
+            bool isInArray = false;
+            //check if this object already exists in the array
+            for (int i = 0; i < Enemies.Length; i++)
+            {
+                if (Enemies[i] == other.gameObject)
+                {
+                    isInArray = true;
+                }
+            }
+            //if not add it to the array
+            if (!isInArray)
+            {
+                for (int i = 0; i < Enemies.Length; i++)
+                {
+                    if (Enemies[i] == null)
+                    {
+                        Enemies[i] = other.gameObject as GameObject;
+                        other.gameObject.SetActive(false);
                         break;
                     }
                 }
