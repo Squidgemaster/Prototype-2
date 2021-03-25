@@ -1549,6 +1549,7 @@ GameObject:
   - component: {fileID: 914333368}
   - component: {fileID: 914333367}
   - component: {fileID: 914333370}
+  - component: {fileID: 914333371}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1655,6 +1656,26 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &914333371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914333366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87d25813d5dbbe04d94e9da3f9bb0691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RotateSpeed: 300
+  ZoomSpeed: 0.4
+  MoveSpeed: 10
+  Smooth: 0.3
+  MaxRotation: 89
+  MinRotation: -89
+  MaxZoom: 100
+  MinZoom: 5
 --- !u!1 &1009318660
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,6 +2450,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WinWindow: {fileID: 673537566}
+  LevelNavMesh: {fileID: 0}
   ResourcesTextbox: {fileID: 650397836}
   ScoreTextbox: {fileID: 1164468033}
   TargetScoreTextbox: {fileID: 883098482}

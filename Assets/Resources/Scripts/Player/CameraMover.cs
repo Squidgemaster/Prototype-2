@@ -9,8 +9,8 @@ public class CameraMover : MonoBehaviour
     [Space(10)]
     public float RotateSpeed = 5f;
     public float ZoomSpeed = 3f;
-    public float Smooth = 0.3f;
     public float MoveSpeed = 10f;
+    public float Smooth = 0.3f;
 
     [Space(10)]
     public float MaxRotation = 90f;
@@ -49,15 +49,13 @@ public class CameraMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleInput();
         MoveCamera();
         RotateCamera();
     }
 
     void MoveCamera()
     {
-        
-        HandleInput();
-
         // Smooth lerp to target values
         CurrentDistance = Mathf.Lerp(CurrentDistance, TargetDistance, Smooth);
         CurrentHorizontal = Mathf.Lerp(CurrentHorizontal, TargetHorizontal, Smooth);
@@ -87,20 +85,28 @@ public class CameraMover : MonoBehaviour
     void RotateCamera()
     {
         // Get delta position of mouse (avoids stiff movement)
-        Vector3 currentPositon = Input.mousePosition;
-        Vector3 deltaPositon = currentPositon - LastMouseLocation;
-        LastMouseLocation = currentPositon;
+        //Vector3 currentPositon = Input.mousePosition;
+        //Vector3 deltaPositon = currentPositon - LastMouseLocation;
+        //LastMouseLocation = currentPositon;
 
         if (Input.GetMouseButton(2))
         {
+            Cursor.lockState = CursorLockMode.Locked;
+
+            Vector2 deltaPosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
             // Update horizontal component
-            float targetHorizontal = TargetHorizontal + deltaPositon.x * Time.unscaledDeltaTime * RotateSpeed;
+            float targetHorizontal = TargetHorizontal + deltaPosition.x * Time.unscaledDeltaTime * RotateSpeed;
             TargetHorizontal = Mathf.Lerp(TargetHorizontal, targetHorizontal, Smooth);
 
             // Update vertical component
-            float targetVertical = TargetVertical + -deltaPositon.y * Time.unscaledDeltaTime * RotateSpeed;
+            float targetVertical = TargetVertical + -deltaPosition.y * Time.unscaledDeltaTime * RotateSpeed;
             targetVertical = Mathf.Clamp(targetVertical, MinRotation, MaxRotation);
             TargetVertical = Mathf.Lerp(TargetVertical, targetVertical, Smooth);
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
         }
         
         // Update distance
