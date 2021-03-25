@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.AI;
 
 
@@ -45,6 +46,8 @@ public class LevelManager : MonoBehaviour
     private readonly Color HasReachedGoal = Color.green;
     private readonly Color HasNotStarted = Color.gray;
 
+    public static event EventHandler LevelRestartEvent;
+
     // Toggle the play button
     public void OnPlayToggle()
     {
@@ -67,6 +70,8 @@ public class LevelManager : MonoBehaviour
         // Add a new prefab
         Transform enemy = Instantiate(EnemyPrefab);
         enemy.parent = ParentEnemy;
+
+        LevelRestartEvent?.Invoke(this, EventArgs.Empty);
 
         // Set default play state the game
         SetIsPlaying(false);
