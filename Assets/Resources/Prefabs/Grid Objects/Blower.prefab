@@ -132,9 +132,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4161987105884417047, guid: 0d60d52444aff6e439d7950ca75d9dca, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -3592830861731507177, guid: 0d60d52444aff6e439d7950ca75d9dca, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: -907409614136924639, guid: 0d60d52444aff6e439d7950ca75d9dca, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0d60d52444aff6e439d7950ca75d9dca, type: 3}
       propertyPath: m_Name
       value: Blower_RefPose
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0d60d52444aff6e439d7950ca75d9dca, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7792388211088837111, guid: 0d60d52444aff6e439d7950ca75d9dca, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d60d52444aff6e439d7950ca75d9dca, type: 3}
