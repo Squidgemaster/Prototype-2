@@ -12,7 +12,7 @@ public class PressurePlate : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy" && Colour != "")
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Boulder" && Colour != "")
         {
             ColourEventManager.ColourEvents[Colour].TriggerActivated();
 
