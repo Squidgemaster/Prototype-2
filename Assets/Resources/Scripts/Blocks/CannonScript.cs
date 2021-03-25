@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CannonScript : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class CannonScript : MonoBehaviour
     private void CannonScript_OnActivated(object sender, System.EventArgs e)
     {
         Activate();
-        DelayedReset();
+        StartCoroutine(DelayedReset());
     }
 
     private void Activate()
@@ -39,11 +40,11 @@ public class CannonScript : MonoBehaviour
         {
             if (Enemies[i] != null)
             {
-                //GameObject BoulderInstance = Instantiate(Enemies[i], transform.position, new Quaternion(), transform) as GameObject;
-                //Rigidbody RigidInstance = BoulderInstance.GetComponent<Rigidbody>();
-                Enemies[i].SetActive(true);
-                Rigidbody RigidInstance = Enemies[i].GetComponent<Rigidbody>();
-                RigidInstance.AddForce((transform.forward + transform.up) * Power);
+                Enemies[i].transform.parent.gameObject.SetActive(true);
+                Enemies[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                Enemies[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                Enemies[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll((transform.forward + transform.up) * Power, ForceMode.Impulse);
+
                 Enemies[i] = null;
             }
         } 
@@ -59,7 +60,6 @@ public class CannonScript : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         Deactivate();
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Enemy")
@@ -85,7 +85,7 @@ public class CannonScript : MonoBehaviour
                     if (Enemies[i] == null)
                     {
                         Enemies[i] = other.gameObject as GameObject;
-                        other.gameObject.SetActive(false);
+                        other.gameObject.transform.parent.gameObject.SetActive(false);
                         break;
                     }
                 }

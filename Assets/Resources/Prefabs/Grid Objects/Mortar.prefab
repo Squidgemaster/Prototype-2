@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!65 &4138486574655932201
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3337436521978629024}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 332.29477, y: 277.9957, z: 259.8}
+  m_Center: {x: -142.69481, y: 138.99783, z: 158.5434}
 --- !u!1 &5287157728973598904
 GameObject:
   m_ObjectHideFlags: 0
@@ -11,7 +24,6 @@ GameObject:
   - component: {fileID: 5287157728973598906}
   - component: {fileID: 1289499633278701911}
   - component: {fileID: 2118032522059219520}
-  - component: {fileID: 5926248771059937066}
   m_Layer: 9
   m_Name: Mortar
   m_TagString: Untagged
@@ -68,7 +80,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  Power: 1000
+  Power: 500
 --- !u!135 &2118032522059219520
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -82,19 +94,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.19
   m_Center: {x: 0, y: 0, z: 1.35}
---- !u!65 &5926248771059937066
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5287157728973598904}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3, y: 3, z: 2.5}
-  m_Center: {x: 0, y: 0, z: -0.3}
 --- !u!1001 &2490944711380874993
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -156,6 +155,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e41eb5f52ab3e3c4f8fe6f70cb541b49, type: 3}
+--- !u!1 &3337436521978629024 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e41eb5f52ab3e3c4f8fe6f70cb541b49, type: 3}
+  m_PrefabInstance: {fileID: 2490944711380874993}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2673770906056380698 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e41eb5f52ab3e3c4f8fe6f70cb541b49, type: 3}

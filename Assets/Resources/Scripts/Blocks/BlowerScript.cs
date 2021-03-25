@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BlowerScript : MonoBehaviour
 {
@@ -41,7 +42,16 @@ public class BlowerScript : MonoBehaviour
                 if (EnemyArray[i] != null)
                 {
                     float distance = Vector3.Distance(transform.position, EnemyArray[i].transform.position);
-                    EnemyArray[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                    if (EnemyArray[i].gameObject.GetComponentInParent<EnemyAI>() != null)
+                    {
+                        EnemyArray[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                        EnemyArray[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                        EnemyArray[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
+                    }
+                    else
+                    {
+                        EnemyArray[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                    }
                 }
             }
         }

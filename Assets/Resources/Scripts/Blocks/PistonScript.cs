@@ -45,10 +45,16 @@ public class PistonScript : MonoBehaviour
 
         for (int i = 0; i < EnemiesInRange.Length; i++)
         {
-            EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
-            EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-            EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().AddForce(transform.right * FirePower);
-            EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().constraints = RigidbodyConstraints.None;
+            if (EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>() != null)
+            {
+                EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.right * FirePower, ForceMode.Impulse);
+            }
+            else
+            {
+                EnemiesInRange[i].gameObject.GetComponentInParent<Rigidbody>().AddForce(transform.right * FirePower);
+            }
         }
 
         Ani.SetTrigger("Attack");
