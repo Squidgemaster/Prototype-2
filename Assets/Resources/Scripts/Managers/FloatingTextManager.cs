@@ -99,7 +99,7 @@ public class FloatingTextManager : MonoBehaviour
         FloatingTextType normalType = new FloatingTextType() {
             Animation = "ScaleSmall",
             FontSize = 20,
-            TextColor = Color.white };
+            TextColor = Color.black };
 
         FloatingTextTypes.Add("Normal", normalType);
     }
