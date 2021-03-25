@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class EnemyAI : MonoBehaviour
 {
-    public List<GameObject> AnimationObjects = new List<GameObject>();
     public List<Quaternion> JointInitialRotation = new List<Quaternion>();
+    public List<GameObject> AnimationObjects = new List<GameObject>();
+    public List<Rigidbody> RagdollRigidbodies = new List<Rigidbody>();
     public List<ConfigurableJoint> RagdollJoints = new List<ConfigurableJoint>();
     public Transform EnemyTarget;
 
@@ -19,6 +21,21 @@ public class EnemyAI : MonoBehaviour
     private Vector3 FinishLocation;
 
     private bool RagdollActive;
+
+    public enum RagdollPart
+    {
+        Pelvis,
+        Head,
+        Torso,
+        LShoulder,
+        LArm,
+        LLeg,
+        LFoot,
+        RShoulder,
+        RArm,
+        RLeg,
+        RFoot
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -38,13 +55,14 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         // Debug tools
-        //#region Debug
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    ActivateRagdoll();
-        //    Agent.ResetPath();
-        //}
-        //#endregion
+        #region Debug
+        if (Input.GetMouseButtonDown(0) && SceneManager.GetActiveScene().name == "Rui")
+        {
+            //ActivateRagdoll();
+            ApplyForceToRagdoll(new Vector3(20.0f, 10.0f), ForceMode.Impulse, RagdollPart.LLeg);
+            Agent.ResetPath();
+        }
+        #endregion
     }
 
     private void FixedUpdate()
@@ -69,12 +87,80 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    // Apply an impulse force to ragdoll (Pelvis by default)
+    public void ApplyForceToRagdoll(Vector3 Force, ForceMode Type)
+    {
+        ActivateRagdoll();
+        RagdollRigidbodies[0].AddForce(Force, Type);
+    }
+
+    // Apply an impulse force to provided part
+    public void ApplyForceToRagdoll(Vector3 Force, ForceMode Type, RagdollPart Part)
+    {
+        ActivateRagdoll();
+
+        // Determine part to apply force to
+        switch (Part)
+        {
+            case RagdollPart.Head:
+                RagdollRigidbodies[8].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.Torso:
+                RagdollRigidbodies[5].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.Pelvis:
+                RagdollRigidbodies[0].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.LShoulder:
+                RagdollRigidbodies[6].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.LArm:
+                RagdollRigidbodies[7].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.LLeg:
+                RagdollRigidbodies[1].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.LFoot:
+                RagdollRigidbodies[2].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.RShoulder:
+                RagdollRigidbodies[9].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.RArm:
+                RagdollRigidbodies[10].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.RLeg:
+                RagdollRigidbodies[3].AddForce(Force, Type);
+                break;
+
+            case RagdollPart.RFoot:
+                RagdollRigidbodies[4].AddForce(Force, Type);
+                break;
+
+            default:
+                Debug.Log("Something has gone wrong with applying force to the ragdoll :c");
+                break;
+        }
+    }
+
     // Gets the ragdoll objects and their animation counterparts
     private void SetupRagdoll()
     {
         // Get the two bodies of the ragdoll if it isn't specified already
         AnimationObject = AnimationObject == null ? transform.Find("Animated").gameObject : AnimationObject;
         PhysicalObject = PhysicalObject == null ? transform.Find("Physical").gameObject : PhysicalObject;
+
+        // Add the pelvis to rigidbodies
+        RagdollRigidbodies.Add(RagdollRoot);
 
         // Get ragdoll joints
         foreach (ConfigurableJoint CJ in PhysicalObject.GetComponentsInChildren<ConfigurableJoint>())
@@ -84,6 +170,7 @@ public class EnemyAI : MonoBehaviour
             {
                 //C.isTrigger = true;
                 RagdollJoints.Add(CJ);
+                RagdollRigidbodies.Add(CJ.GetComponent<Rigidbody>());
             }
         }
 
