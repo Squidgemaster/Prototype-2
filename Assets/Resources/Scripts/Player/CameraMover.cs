@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CameraMover : MonoBehaviour
 {
-
     [Space(10)]
     public float RotateSpeed = 5f;
     public float ZoomSpeed = 3f;
@@ -20,7 +19,8 @@ public class CameraMover : MonoBehaviour
     public float MaxZoom = 30f;
     public float MinZoom = 5f;
 
-    private Vector3 LastMouseLocation;
+    private RadialMenu BuildingMenu;
+    private LevelManager MainLevelManager;
 
     private Vector3 TargetFocusPosition;
     private float TargetDistance;
@@ -34,7 +34,8 @@ public class CameraMover : MonoBehaviour
 
     private void Start()
     {
-        LastMouseLocation = Input.mousePosition;
+        BuildingMenu = GameObject.Find("Radial Menu - Building").GetComponent<RadialMenu>();
+        MainLevelManager = GameObject.FindObjectOfType<LevelManager>();
 
         TargetFocusPosition = Vector3.zero;
         TargetDistance = 75.0f;
@@ -87,10 +88,10 @@ public class CameraMover : MonoBehaviour
 
     void RotateCamera()
     {
-
         if (Input.GetMouseButton(2))
         {
             Cursor.lockState = CursorLockMode.Locked;
+            BuildingMenu.IsEnabled = (!MainLevelManager.HasStarted && false);
 
             Vector2 deltaPosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
@@ -106,6 +107,7 @@ public class CameraMover : MonoBehaviour
         else
         {
             Cursor.lockState = CursorLockMode.None;
+            BuildingMenu.IsEnabled = (!MainLevelManager.HasStarted && true);
         }
         
         // Update distance

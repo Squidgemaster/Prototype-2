@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplaySolidTiles: 0
   Width: 20
-  Length: 10
+  Length: 11
   Depth: 10
   TileSize: 3
 --- !u!114 &3751986635209121995
@@ -424,11 +424,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RotateSpeed: 300
   ZoomSpeed: 0.4
-  MoveSpeed: 10
+  MoveSpeed: 30
   Smooth: 0.3
   MaxRotation: 89
   MinRotation: -89
-  MaxZoom: 100
+  MaxZoom: 200
   MinZoom: 5
 --- !u!1 &5560804071468433842
 GameObject:
@@ -982,6 +982,8 @@ MonoBehaviour:
   TargetScore: 100
   CurrentResources: 0
   CurrentScore: 0
+  IsPlaying: 0
+  HasStarted: 0
 --- !u!1 &5560804071903141041
 GameObject:
   m_ObjectHideFlags: 0

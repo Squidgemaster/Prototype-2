@@ -15,7 +15,6 @@ public class FloatingTextManager : MonoBehaviour
 {
     public GameObject FloatingTextPrefab;
 
-
     private Dictionary<string, FloatingTextType> FloatingTextTypes;
 
     private Camera MainCamera;
@@ -37,7 +36,7 @@ public class FloatingTextManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TestCode();
+        //TestCode();
 
 
         FloatingTexts.RemoveAll(item => item == null);
