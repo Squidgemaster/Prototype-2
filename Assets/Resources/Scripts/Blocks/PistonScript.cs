@@ -73,6 +73,7 @@ public class PistonScript : MonoBehaviour
         {
             hit.gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
             hit.gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+            hit.gameObject.transform.position = transform.position + transform.forward * 3.5f;
             if (hit.gameObject.GetComponent<Rigidbody>() != null)
             {
                 hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower, ForceMode.Impulse);
