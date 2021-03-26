@@ -55,7 +55,7 @@ public class CannonScript : MonoBehaviour
 
                 Enemies[i] = null;
             }
-            else if (Enemies[i].gameObject.tag == "Boulder")
+            else if (Enemies[i].gameObject.tag == "Boulder" && Enemies[i] != null)
             {
                 Enemies[i].gameObject.GetComponent<Rigidbody>().AddForce((transform.forward + transform.up) * Power);
             }
