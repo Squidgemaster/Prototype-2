@@ -401,6 +401,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5560804071431389460, guid: a6796a61534aa144ea81b3a696d36f89, type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560804071431389460, guid: a6796a61534aa144ea81b3a696d36f89, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.9960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560804071431389460, guid: a6796a61534aa144ea81b3a696d36f89, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.8235295
+      objectReference: {fileID: 0}
+    - target: {fileID: 5560804071431389460, guid: a6796a61534aa144ea81b3a696d36f89, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.4039216
+      objectReference: {fileID: 0}
     - target: {fileID: 5560804072020332568, guid: a6796a61534aa144ea81b3a696d36f89, type: 3}
       propertyPath: m_Name
       value: Essentials

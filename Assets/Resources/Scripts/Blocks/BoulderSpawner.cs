@@ -18,8 +18,7 @@ public class BoulderSpawner : MonoBehaviour
         }
 
         LevelManager.LevelRestartEvent += LevelManager_LevelRestartEvent;
-        
-        BoulderManager = Instantiate(Boulder, transform.position + new Vector3(0f, 1f, 0f), new Quaternion()) as GameObject;
+        SpawnBoulder();
     }
 
     private void LevelManager_LevelRestartEvent(object sender, System.EventArgs e)
@@ -47,6 +46,16 @@ public class BoulderSpawner : MonoBehaviour
     {
         Destroy(BoulderManager);
         BoulderManager = null;
+        SpawnBoulder();
+    }
+
+    private void SpawnBoulder()
+    {
         BoulderManager = Instantiate(Boulder, transform.position + new Vector3(0f, 1f, 0f), new Quaternion()) as GameObject;
+
+        if (Colour != "" && Colour != "none")
+        {
+            GridPlacer.UpdateAllMaterials(BoulderManager, "Colour (Instance)", ColourEventManager.ColourMaterials[Colour]);
+        }
     }
 }

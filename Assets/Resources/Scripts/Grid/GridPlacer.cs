@@ -102,7 +102,7 @@ public class GridPlacer : MonoBehaviour
                         {
                             // Update material to the colour selected from the radial menu
                             Material colourMaterial = ColourEventManager.ColourMaterials[ColourMenu.SelectedSegment];
-                            UpdateAllMaterials(placedObject, colourMaterial); 
+                            UpdateAllMaterials(placedObject, "Colour (Instance)", colourMaterial); 
                         }
 
                         break;
@@ -202,7 +202,7 @@ public class GridPlacer : MonoBehaviour
 
     }
 
-    private void UpdateAllMaterials(GameObject parent, Material material)
+    public static void UpdateAllMaterials(GameObject parent, Material material)
     {
         // Get all the renderer components in children
         Renderer[] children = parent.GetComponentsInChildren<Renderer>();
@@ -212,6 +212,37 @@ public class GridPlacer : MonoBehaviour
         {
             // Update all the materials to the new one
             rend.materials = Enumerable.Repeat(material, rend.materials.Length).ToArray();
+        }
+    }
+
+    // Replaces only the materials with the given name
+    public static void UpdateAllMaterials(GameObject parent, string name, Material material)
+    {
+        // Get all the renderer components in children
+        Renderer[] children = parent.GetComponentsInChildren<Renderer>();
+
+        // Loop through them
+        foreach (Renderer rend in children)
+        {
+            // Create a new array (cannot update materials by assignment only)
+            Material[] temp = new Material[rend.materials.Length];
+
+            // Loop through the materials
+            for (int i = 0; i < rend.materials.Length; ++i)
+            {
+                // Only update the material with the same name
+                if (rend.materials[i].name == name)
+                {
+                    temp[i] = material;
+                }
+                else
+                {
+                    temp[i] = rend.materials[i];
+                }
+            }
+
+            // Assign the new materials
+            rend.materials = temp;
         }
     }
 
