@@ -14,8 +14,6 @@ public class BoulderPointScr : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Wah");
-
         EnemyAI enemy = collision.gameObject.GetComponentInParent<EnemyAI>();
 
         if (enemy != null)

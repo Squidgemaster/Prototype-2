@@ -68,23 +68,19 @@ public class PistonScript : MonoBehaviour
                 }
 
                 // Add score
-                EnemiesInRange[i].GetComponentInParent<EnemyAI>().Score += 10;
-                FTM.CreateFloatingText(EnemiesInRange[i].GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 10");
+                hit.GetComponentInParent<EnemyAI>().Score += 10;
+                FTM.CreateFloatingText(hit.GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 10");
             }
             else if (hit.gameObject.tag == "Boulder")
             {
                 //Add a force to all attached rigidbodies
                 if (hit.gameObject.GetComponent<Rigidbody>() != null)
                 {
-
-                    hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower/20, ForceMode.Impulse);
+                    hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower / 20, ForceMode.Impulse);
                 }
             }
-
-
         }
+        
         Ani.SetTrigger("Attack");
     }
-
-
 }
