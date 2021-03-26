@@ -36,55 +36,7 @@ public class BlowerScript : MonoBehaviour
 
     private void Activate()
     {
-        Collider[] EnemiesInRange = Physics.OverlapSphere(transform.position + transform.forward * 3f, 1.1f, Enemies);
-
-        if (EnemiesInRange.Length > 0)
-        {
-            for (int i = 0; i < EnemiesInRange.Length; i++)
-            {
-                    float distance = Vector3.Distance(transform.position, EnemiesInRange[i].transform.position);
-                    if (EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>() != null)
-                    {
-                        EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
-                        EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-                        EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
-                    }
-                    else if (EnemiesInRange[i].gameObject.tag == "Boulder")
-                    {
-                        EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
-                    }
-                
-            }
-        }
-
-        EnemiesInRange = Physics.OverlapSphere(transform.position + transform.forward * 6f, 1.1f, Enemies);
-
-        if (EnemiesInRange.Length > 0)
-        {
-            for (int i = 0; i < EnemiesInRange.Length; i++)
-            {
-                float distance = Vector3.Distance(transform.position, EnemiesInRange[i].transform.position);
-                if (EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>() != null)
-                {
-                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
-                    EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
-                }
-                else if (EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<EnemyAI>() != null)
-                {
-                    EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
-                    EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-                    EnemiesInRange[i].gameObject.transform.parent.gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
-                }
-                else if (EnemiesInRange[i].gameObject.tag == "Boulder")
-                {
-                    EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
-                }
-
-            }
-        }
-
-        EnemiesInRange = Physics.OverlapSphere(transform.position + transform.forward * 9f, 1.1f, Enemies);
+        Collider[] EnemiesInRange = Physics.OverlapCapsule(transform.position, transform.position + transform.forward * 9f, 1.2f, Enemies);
 
         if (EnemiesInRange.Length > 0)
         {
@@ -101,7 +53,6 @@ public class BlowerScript : MonoBehaviour
                 {
                     EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
                 }
-
             }
         }
 

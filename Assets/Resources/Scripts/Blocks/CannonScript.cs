@@ -32,6 +32,7 @@ public class CannonScript : MonoBehaviour
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= CannonScript_OnActivated;
         }
+        LevelManager.LevelRestartEvent -= LevelManager_LevelRestartEvent;
     }
 
     private void CannonScript_OnActivated(object sender, System.EventArgs e)
