@@ -14,6 +14,7 @@ public class EnemyAI : MonoBehaviour
     public Transform EnemyTarget;
 
     public int Score;
+    private FloatingTextManager FTM;
 
     [SerializeField] private GameObject AnimationObject;
     [SerializeField] private GameObject PhysicalObject;
@@ -41,6 +42,7 @@ public class EnemyAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        FTM = FindObjectOfType<FloatingTextManager>();
         Agent = GetComponent<NavMeshAgent>();
 
         RagdollActive = false;
@@ -74,14 +76,6 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.name != "Ground")
-    //    {
-    //        other.attachedRigidbody.
-    //    }
-    //}
-
     // Activates the ragdolling
     public void ActivateRagdoll()
     {
@@ -101,6 +95,7 @@ public class EnemyAI : MonoBehaviour
     private void OnDestroy()
     {
         FindObjectOfType<LevelManager>().AddScore(Score);
+        FindObjectOfType<FloatingTextManager>().CreateFloatingText(RagdollRoot.position, FloatingTextType.DeathPoints, Score.ToString());
     }
 
     // Apply an impulse force to ragdoll (Pelvis by default)

@@ -55,8 +55,10 @@ public class PistonScript : MonoBehaviour
                 EnemiesInRange[i].GetComponentInParent<EnemyAI>().ActivateRagdoll();
                 EnemiesInRange[i].GetComponentInParent<NavMeshAgent>().enabled = false;
                 EnemiesInRange[i].GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * FirePower, ForceMode.Impulse);
+
+                // Add score
                 EnemiesInRange[i].GetComponentInParent<EnemyAI>().Score += 10;
-                FTM.CreateFloatingText(EnemiesInRange[i].GetComponentInParent<EnemyAI>().transform.position, "Normal", "OH MY GOD DID YOU JUST SMASH THAT POOR LAD WITH A GOD DAMN PISTON I'LL GIVE YOU A THUNDEROUS APPLUD AND AWARD YOU WITH 10 POINTS!!!");
+                FTM.CreateFloatingText(EnemiesInRange[i].GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 10");
             }
             else if (EnemiesInRange[i].gameObject.tag == "Boulder")
             {

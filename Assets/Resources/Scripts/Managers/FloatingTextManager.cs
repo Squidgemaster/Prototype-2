@@ -3,7 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public struct FloatingTextType
+public enum FloatingTextType
+{
+    Normal,
+    DeathPoints,
+}
+
+public struct FloatingTextData
 {
     public string Animation;
     public Color TextColor;
@@ -15,7 +21,7 @@ public class FloatingTextManager : MonoBehaviour
 {
     public GameObject FloatingTextPrefab;
 
-    private Dictionary<string, FloatingTextType> FloatingTextTypes;
+    private Dictionary<FloatingTextType, FloatingTextData> FloatingTextDatas;
 
     private Camera MainCamera;
     private List<Transform> FloatingTexts;
@@ -53,14 +59,14 @@ public class FloatingTextManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            CreateFloatingText(Vector3.zero, "Normal", "Stuff");
+            CreateFloatingText(Vector3.zero, FloatingTextType.Normal, "Stuff");
         }
     }
 
-    public void CreateFloatingText(Vector3 location, string type, string text)
+    public void CreateFloatingText(Vector3 location, FloatingTextType type, string text)
     {
         // Get the data from the dictionary
-        FloatingTextType data = FloatingTextTypes[type];
+        FloatingTextData data = FloatingTextDatas[type];
 
         // Create parent object (so that all animations are relative to this location)
         GameObject parent = new GameObject();
@@ -72,6 +78,7 @@ public class FloatingTextManager : MonoBehaviour
         // Instantiate a new floating text object
         GameObject floatingText = Instantiate(FloatingTextPrefab);
         floatingText.transform.parent = parent.transform;
+        floatingText.transform.localPosition = Vector3.zero;
 
         // Rotate to face the camera
         Vector3 camLocation = MainCamera.transform.position;
@@ -93,14 +100,23 @@ public class FloatingTextManager : MonoBehaviour
 
     private void GenerateTextTypes()
     {
-        FloatingTextTypes = new Dictionary<string, FloatingTextType>();
+        FloatingTextDatas = new Dictionary<FloatingTextType, FloatingTextData>();
 
-        // Air time
-        FloatingTextType normalType = new FloatingTextType() {
+        // Normal
+        FloatingTextData normalType = new FloatingTextData() {
             Animation = "ScaleSmall",
-            FontSize = 20,
+            FontSize = 15,
             TextColor = Color.black };
 
-        FloatingTextTypes.Add("Normal", normalType);
+        FloatingTextDatas.Add(FloatingTextType.Normal, normalType);
+
+
+        // Death points
+        FloatingTextData deathType = new FloatingTextData() {
+            Animation = "FinalPoints",
+            FontSize = 20,
+            TextColor = Color.yellow };
+
+        FloatingTextDatas.Add(FloatingTextType.DeathPoints, deathType);
     }
 }

@@ -9,6 +9,8 @@ public class CannonScript : MonoBehaviour
     [SerializeField] private GameObject[] Enemies = new GameObject[20];
     [SerializeField] private float Power;
 
+    private FloatingTextManager FTM;
+
     private void Start()
     {
         Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
@@ -19,6 +21,7 @@ public class CannonScript : MonoBehaviour
         }
 
         LevelManager.LevelRestartEvent += LevelManager_LevelRestartEvent;
+        FTM = FindObjectOfType<FloatingTextManager>();
     }
 
     private void LevelManager_LevelRestartEvent(object sender, System.EventArgs e)
@@ -53,9 +56,13 @@ public class CannonScript : MonoBehaviour
                 Enemies[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
                 Enemies[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll((transform.forward + transform.up) * Power, ForceMode.Impulse);
 
+                // Add score
+                Enemies[i].GetComponentInParent<EnemyAI>().Score += 25;
+                FTM.CreateFloatingText(Enemies[i].GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 25");
+
                 Enemies[i] = null;
             }
-            else if (Enemies[i].gameObject.tag == "Boulder")
+            else if (Enemies[i] != null && Enemies[i].gameObject.tag == "Boulder")
             {
                 Enemies[i].gameObject.GetComponent<Rigidbody>().AddForce((transform.forward + transform.up) * Power);
             }
