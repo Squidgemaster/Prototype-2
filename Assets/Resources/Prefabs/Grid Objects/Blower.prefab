@@ -48,7 +48,7 @@ MonoBehaviour:
   Enemies:
     serializedVersion: 2
     m_Bits: 4096
-  Power: 200
+  Power: 500
 --- !u!1 &5042556750879317082
 GameObject:
   m_ObjectHideFlags: 0

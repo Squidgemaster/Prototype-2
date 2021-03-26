@@ -7,7 +7,7 @@ public class BlowerScript : MonoBehaviour
 {
     string Colour = "";
     [SerializeField] private LayerMask Enemies;
-    public float Power = 500f;
+    public float FirePower = 500f;
     private Animator BlowerAni;
 
     private void Start()
@@ -47,11 +47,20 @@ public class BlowerScript : MonoBehaviour
                 {
                     EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
                     EnemiesInRange[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-                    EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * Power * 1 / distance, ForceMode.Impulse);
+                    //EnemiesInRange[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * FirePower * 1 / distance, ForceMode.Impulse);
+
+                    Rigidbody[] bodies = EnemiesInRange[i].GetComponentsInChildren<Rigidbody>();
+                    //Add a force to all attached rigidbodies
+                    for (int j = 0; j < bodies.Length; j++)
+                    {
+                        bodies[j].velocity = Vector3.zero;
+                        bodies[j].AddForce(transform.forward * (FirePower / 2) * 1 / distance, ForceMode.Impulse);
+                    }
+                   
                 }
                 else if (EnemiesInRange[i].gameObject.tag == "Boulder")
                 {
-                    EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * Power * 1 / distance);
+                    EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * (FirePower) * 1 / distance);
                 }
             }
         }

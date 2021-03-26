@@ -6,8 +6,8 @@ using UnityEngine.AI;
 public class CannonScript : MonoBehaviour
 {
     public string Colour = "none";
-    [SerializeField] private GameObject[] Enemies = new GameObject[20];
-    [SerializeField] private float Power;
+    [SerializeField] private float FirePower;
+    List<GameObject> Enemies = new List<GameObject>();
 
     private void Start()
     {
@@ -24,6 +24,7 @@ public class CannonScript : MonoBehaviour
     private void LevelManager_LevelRestartEvent(object sender, System.EventArgs e)
     {
         this.gameObject.GetComponent<SphereCollider>().enabled = true;
+        Enemies.Clear();
     }
 
     private void OnDestroy()
@@ -33,6 +34,7 @@ public class CannonScript : MonoBehaviour
             ColourEventManager.ColourEvents[Colour].OnActivated -= CannonScript_OnActivated;
         }
         LevelManager.LevelRestartEvent -= LevelManager_LevelRestartEvent;
+        Enemies.Clear();
     }
 
     private void CannonScript_OnActivated(object sender, System.EventArgs e)
@@ -43,23 +45,29 @@ public class CannonScript : MonoBehaviour
 
     private void Activate()
     {
+        //diable sphere collider while firing
         this.gameObject.GetComponent<SphereCollider>().enabled = false;
-        for (int i = 0; i < Enemies.Length; i++)
+
+        for (int i = 0; i < Enemies.Count; i++)
         {
-            if (Enemies[i] != null && Enemies[i].gameObject.GetComponentInParent<EnemyAI>() != null)
+            if (Enemies[i].tag == "Enemy")
             {
                 Enemies[i].transform.parent.gameObject.SetActive(true);
-                Enemies[i].gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
-                Enemies[i].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-                Enemies[i].gameObject.GetComponentInParent<EnemyAI>().ApplyForceToRagdoll((transform.forward + transform.up) * Power, ForceMode.Impulse);
+                
+                //Put object infront of this object
+                Enemies[i].transform.position = transform.position + transform.forward * 2f;
 
-                Enemies[i] = null;
+                Rigidbody[] bodies = Enemies[i].GetComponentsInChildren<Rigidbody>();
+                //Add a force to all attached rigidbodies
+                for (int j = 0; j < bodies.Length; j++)
+                {
+                    bodies[j].velocity = Vector3.zero;
+                    bodies[j].AddForce((transform.forward + transform.up) * FirePower, ForceMode.Impulse);
+                }
+
+                Enemies.Remove(Enemies[i]);
             }
-            else if (Enemies[i].gameObject.tag == "Boulder" && Enemies[i] != null)
-            {
-                Enemies[i].gameObject.GetComponent<Rigidbody>().AddForce((transform.forward + transform.up) * Power);
-            }
-        } 
+        }
     }
 
     private void Deactivate()
@@ -74,59 +82,16 @@ public class CannonScript : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Boulder")
         {
-            //add gameobject to array of objects  to store in the cannon
-            bool isInArray = false;
-            //check if this object already exists in the array
-            for (int i = 0; i < Enemies.Length; i++)
-            {
-                if (Enemies[i] == other.gameObject)
-                {
-                    isInArray = true;
-                }
-            }
-            //if not add it to the array
-            if (!isInArray)
-            {
-                for (int i = 0; i < Enemies.Length; i++)
-                {
-                    if (Enemies[i] == null)
-                    {
-                        Enemies[i] = other.gameObject as GameObject;
-                        other.gameObject.transform.parent.gameObject.SetActive(false);
-                        break;
-                    }
-                }
-            }
-        }
-
-        else if (other.gameObject.tag == "Boulder")
-        {
-
-            //add gameobject to array of objects  to store in the cannon
-            bool isInArray = false;
-            //check if this object already exists in the array
-            for (int i = 0; i < Enemies.Length; i++)
-            {
-                if (Enemies[i] == other.gameObject)
-                {
-                    isInArray = true;
-                }
-            }
-            //if not add it to the array
-            if (!isInArray)
-            {
-                for (int i = 0; i < Enemies.Length; i++)
-                {
-                    if (Enemies[i] == null)
-                    {
-                        Enemies[i] = other.gameObject as GameObject;
-                        other.gameObject.SetActive(false);
-                        break;
-                    }
-                }
-            }
-        }
+            //Add enemy to list
+            Enemies.Add(other.gameObject);
+            //Turn Enemy into ragdolls
+            Enemies[0].GetComponentInParent<EnemyAI>().ActivateRagdoll();
+            //Diable NavMesh
+            Enemies[0].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+            //diable parent object
+            Enemies[0].gameObject.transform.parent.gameObject.SetActive(false);
+        }  
     }
 }

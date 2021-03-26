@@ -47,37 +47,37 @@ public class PistonScript : MonoBehaviour
 
     private void Activate()
     {
-        //Collider[] EnemiesInRange = Physics.OverlapCapsule(transform.position, transform.position + transform.forward *3.5f, 1f, Enemies);
-
-        //for (int i = 0; i < EnemiesInRange.Length; i++)
-        //{
-        //    if (EnemiesInRange[i].gameObject.tag == "Enemy")
-        //    {
-        //        EnemiesInRange[i].GetComponentInParent<EnemyAI>().ActivateRagdoll();
-        //        EnemiesInRange[i].GetComponentInParent<NavMeshAgent>().enabled = false;
-        //        EnemiesInRange[i].GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * FirePower, ForceMode.Impulse);
-        //        EnemiesInRange[i].GetComponentInParent<EnemyAI>().Score += 10;
-        //        FTM.CreateFloatingText(EnemiesInRange[i].GetComponentInParent<EnemyAI>().transform.position, "Normal", "OH MY GOD DID YOU JUST SMASH THAT POOR LAD WITH A GOD DAMN PISTON I'LL GIVE YOU A THUNDEROUS APPLUD AND AWARD YOU WITH 10 POINTS!!!");
-        //    }
-        //    else if (EnemiesInRange[i].gameObject.tag == "Boulder")
-        //    {
-        //        EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower);
-        //    }
-        //}
-
-
         // Find all nearby colliders
         Collider[] colliders = Physics.OverlapCapsule(transform.position, transform.position + transform.forward * 3.5f, 1f, Enemies);
-    // Turn nearby characters into ragdolls
+
         foreach (var hit in colliders)
         {
-            hit.gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
-            hit.gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-            hit.gameObject.transform.position = transform.position + transform.forward * 3.5f;
-            if (hit.gameObject.GetComponent<Rigidbody>() != null)
+            if (hit.gameObject.tag == "Enemy")
             {
-                hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower, ForceMode.Impulse);
+                //Turn Enemy into ragdolls
+                hit.gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                //Diable NavMesh
+                hit.gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                //Put object infront of this object
+                hit.gameObject.transform.position = transform.position + transform.forward * 3.5f;
+                //Add a force to all attached rigidbodies
+                if (hit.gameObject.GetComponent<Rigidbody>() != null)
+                {
+                    hit.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower, ForceMode.Impulse);
+                }
             }
+            else if (hit.gameObject.tag == "Boulder")
+            {
+                //Add a force to all attached rigidbodies
+                if (hit.gameObject.GetComponent<Rigidbody>() != null)
+                {
+                    
+                    hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower/20, ForceMode.Impulse);
+                }
+            }
+           
+            
         }
         Ani.SetTrigger("Attack");
     }
