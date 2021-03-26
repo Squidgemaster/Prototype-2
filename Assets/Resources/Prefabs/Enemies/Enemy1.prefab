@@ -1268,7 +1268,7 @@ ConfigurableJoint:
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
   m_EnableCollision: 0
-  m_EnablePreprocessing: 1
+  m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
 --- !u!54 &264445705618703582
@@ -1554,7 +1554,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2042341376137094634, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
       propertyPath: m_Layer
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2042341376137094634, guid: 69b579ebe7a40a04b90a2d14466163f8, type: 3}
       propertyPath: m_IsActive

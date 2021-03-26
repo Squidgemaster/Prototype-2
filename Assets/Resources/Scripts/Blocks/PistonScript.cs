@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class PistonScript : MonoBehaviour
 {
@@ -46,26 +47,44 @@ public class PistonScript : MonoBehaviour
 
     private void Activate()
     {
-        Collider[] EnemiesInRange = Physics.OverlapCapsule(transform.position, transform.position + transform.forward *3.5f, 1f, Enemies);
+        // Find all nearby colliders
+        Collider[] colliders = Physics.OverlapCapsule(transform.position, transform.position + transform.forward * 3.5f, 1f, Enemies);
 
-        for (int i = 0; i < EnemiesInRange.Length; i++)
+        foreach (var hit in colliders)
         {
-            if (EnemiesInRange[i].gameObject.tag == "Enemy")
+            if (hit.gameObject.tag == "Enemy")
             {
-                EnemiesInRange[i].GetComponentInParent<EnemyAI>().ActivateRagdoll();
-                EnemiesInRange[i].GetComponentInParent<NavMeshAgent>().enabled = false;
-                EnemiesInRange[i].GetComponentInParent<EnemyAI>().ApplyForceToRagdoll(transform.forward * FirePower, ForceMode.Impulse);
+                //Turn Enemy into ragdolls
+                hit.gameObject.GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                //Diable NavMesh
+                hit.gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                //Put object infront of this object
+                hit.gameObject.transform.position = transform.position + transform.forward * 3.5f;
+                //Add a force to all attached rigidbodies
+                if (hit.gameObject.GetComponent<Rigidbody>() != null)
+                {
+                    hit.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower, ForceMode.Impulse);
+                }
 
                 // Add score
                 EnemiesInRange[i].GetComponentInParent<EnemyAI>().Score += 10;
                 FTM.CreateFloatingText(EnemiesInRange[i].GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 10");
             }
-            else if (EnemiesInRange[i].gameObject.tag == "Boulder")
+            else if (hit.gameObject.tag == "Boulder")
             {
-                EnemiesInRange[i].gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower);
-            }
-        }
+                //Add a force to all attached rigidbodies
+                if (hit.gameObject.GetComponent<Rigidbody>() != null)
+                {
 
+                    hit.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward * FirePower/20, ForceMode.Impulse);
+                }
+            }
+
+
+        }
         Ani.SetTrigger("Attack");
     }
+
+
 }

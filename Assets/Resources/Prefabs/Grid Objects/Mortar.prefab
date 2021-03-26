@@ -59,11 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Colour: none
-  Enemies:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  Power: 500
+  FirePower: 50
 --- !u!135 &2118032522059219520
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -76,7 +72,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.19
-  m_Center: {x: 0, y: 0, z: 1.35}
+  m_Center: {x: 0, y: 0, z: 1.79}
 --- !u!1001 &2490944711380874993
 PrefabInstance:
   m_ObjectHideFlags: 0
