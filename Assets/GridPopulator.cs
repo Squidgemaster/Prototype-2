@@ -20,12 +20,9 @@ public class GridPopulator : MonoBehaviour
 
     private void Grid_OnGridInitialised(object sender, System.EventArgs e)
     {
-
         // Paste generated code here:
         // --------------------------------------------------------------------------------------
         // --------------------------------------------------------------------------------------
-
-        colourMenu.SelectedSegment = "";
     }
 
     private void PlaceObject(string name, int x, int y, int z, EDirection direction, string colour)
