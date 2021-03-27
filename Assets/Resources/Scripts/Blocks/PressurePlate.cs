@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PressurePlate : MonoBehaviour
+public class PressurePlate : MonoBehaviour, IGridObject
 {
-    public string Colour = "";
+    public string Colour { get; set; }
 
-    private void Start()
-    {
-        Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
-    }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Boulder" && Colour != "")
+        if ((other.gameObject.tag == "Enemy" || other.gameObject.tag == "Boulder") && Colour != "" && Colour != null)
         {
             ColourEventManager.ColourEvents[Colour].TriggerActivated();
 

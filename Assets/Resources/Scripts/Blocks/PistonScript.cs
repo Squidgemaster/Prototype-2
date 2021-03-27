@@ -5,9 +5,10 @@ using UnityEngine.AI;
 using System;
 using UnityEngine.SceneManagement;
 
-public class PistonScript : MonoBehaviour
+public class PistonScript : MonoBehaviour, IGridObject
 {
-    public string Colour = "";
+    public string Colour { get; set; }
+
     [SerializeField] private LayerMask Enemies;
     [SerializeField] private float FirePower = 100f;
     [SerializeField] private Animator Ani;
@@ -16,9 +17,7 @@ public class PistonScript : MonoBehaviour
 
     private void Start()
     {
-        Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
-
-        if (Colour != "")
+        if (Colour != "" && Colour != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += PistonScript_OnActivated;
         }
@@ -28,7 +27,7 @@ public class PistonScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Colour != "" && Colour != "none")
+        if (Colour != "" && Colour != null && ColourEventManager.ColourEvents != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= PistonScript_OnActivated;
         }

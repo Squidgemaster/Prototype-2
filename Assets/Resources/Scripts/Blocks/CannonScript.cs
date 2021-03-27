@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class CannonScript : MonoBehaviour
+public class CannonScript : MonoBehaviour, IGridObject
 {
-    public string Colour = "none";
+    public string Colour { get; set; }
+
     [SerializeField] private float FirePower;
     List<GameObject> Enemies = new List<GameObject>();
 
@@ -13,9 +14,7 @@ public class CannonScript : MonoBehaviour
 
     private void Start()
     {
-        Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
-
-        if (Colour != "")
+        if (Colour != "" && Colour != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += CannonScript_OnActivated;
         }
@@ -32,7 +31,7 @@ public class CannonScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Colour != "" && Colour != "none")
+        if (Colour != "" && Colour != null && ColourEventManager.ColourEvents != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= CannonScript_OnActivated;
         }
@@ -55,27 +54,36 @@ public class CannonScript : MonoBehaviour
         {
             if (Enemies[i].tag == "Enemy")
             {
+                // Put object infront of this object
+                // ---------------------------------------------------
                 Enemies[i].transform.parent.gameObject.SetActive(true);
-
-                //Put object infront of this object
                 Enemies[i].transform.position = transform.position + transform.forward * 2f;
-
-                // Add score
-                Enemies[i].GetComponentInParent<EnemyAI>().Score += 25;
-                FTM.CreateFloatingText(Enemies[i].GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 25");
-
-                Enemies.Remove(Enemies[i]);
-            }
-            else if (Enemies[i] != null && Enemies[i].gameObject.tag == "Boulder")
-            {
-                Rigidbody[] bodies = Enemies[i].GetComponentsInChildren<Rigidbody>();
+                // ---------------------------------------------------
 
                 //Add a force to all attached rigidbodies
+                // ---------------------------------------------------
+                Rigidbody[] bodies = Enemies[i].GetComponentsInChildren<Rigidbody>();
+
                 for (int j = 0; j < bodies.Length; j++)
                 {
                     bodies[j].velocity = Vector3.zero;
                     bodies[j].AddForce((transform.forward + transform.up) * FirePower, ForceMode.Impulse);
                 }
+                // ---------------------------------------------------
+
+                // Add score
+                // ---------------------------------------------------
+                Enemies[i].GetComponentInParent<EnemyAI>().Score += 25;
+                FTM.CreateFloatingText(Enemies[i].GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 25");
+                // ---------------------------------------------------
+
+                Enemies.Remove(Enemies[i]);
+            }
+            else if (Enemies[i] != null && Enemies[i].gameObject.tag == "Boulder")
+            {
+                Rigidbody body = Enemies[i].GetComponentInChildren<Rigidbody>();
+                body.velocity = Vector3.zero;
+                body.AddForce((transform.forward + transform.up) * FirePower, ForceMode.Impulse);
 
                 Enemies.Remove(Enemies[i]);
             }
@@ -98,12 +106,16 @@ public class CannonScript : MonoBehaviour
         {
             //Add enemy to list
             Enemies.Add(other.gameObject);
-            //Turn Enemy into ragdolls
-            Enemies[0].GetComponentInParent<EnemyAI>().ActivateRagdoll();
-            //Diable NavMesh
-            Enemies[0].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
-            //diable parent object
-            Enemies[0].gameObject.transform.parent.gameObject.SetActive(false);
+
+            if (other.gameObject.tag == "Enemy")
+            {
+                //Turn Enemy into ragdolls
+                Enemies[0].GetComponentInParent<EnemyAI>().ActivateRagdoll();
+                //Diable NavMesh
+                Enemies[0].gameObject.GetComponentInParent<NavMeshAgent>().enabled = false;
+                //diable parent object
+                Enemies[0].gameObject.transform.parent.gameObject.SetActive(false);
+            }
         }
     }
 }

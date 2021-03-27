@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoulderSpawner : MonoBehaviour
+public class BoulderSpawner : MonoBehaviour, IGridObject
 {
-    string Colour = "none";
+    public string Colour { get; set; }
+
     [SerializeField] private GameObject Boulder;
     GameObject BoulderManager;
 
     private void Start()
-    {
-        Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
-        
-        if (Colour != "")
+    {        
+        if (Colour != "" && Colour != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += BoulderSpawner_OnActivated;
         }
@@ -28,7 +27,7 @@ public class BoulderSpawner : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Colour != "" && Colour != "none")
+        if (Colour != "" && Colour != null && ColourEventManager.ColourEvents != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= BoulderSpawner_OnActivated;
         }
@@ -53,7 +52,7 @@ public class BoulderSpawner : MonoBehaviour
     {
         BoulderManager = Instantiate(Boulder, transform.position + new Vector3(0f, 1f, 0f), new Quaternion()) as GameObject;
 
-        if (Colour != "" && Colour != "none")
+        if (Colour != "" && Colour != null)
         {
             GridPlacer.UpdateAllMaterials(BoulderManager, "Colour (Instance)", ColourEventManager.ColourMaterials[Colour]);
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public enum EDirection
@@ -17,13 +18,17 @@ public struct GridObjectData
     private bool[,,] SolidTiles;
     private Vector3Int SolidTilesOffset;
 
+    public string ObjectName;
+
     public bool MustBeSupported;
     public bool CanBeBuiltOn;
 
     public int Cost;
 
-    public GridObjectData(bool[,,] solidTable, Vector3Int solidOffset, bool mustBeSupported, bool canBeBuiltOn, int cost)
+    public GridObjectData(string name, bool[,,] solidTable, Vector3Int solidOffset, bool mustBeSupported, bool canBeBuiltOn, int cost)
     {
+        ObjectName = name;
+
         SolidTiles = solidTable;
         SolidTilesOffset = solidOffset;
 
@@ -217,6 +222,7 @@ public class Grid3D : MonoBehaviour
     // Utility events
     public static event EventHandler<BlockArgs> OnTileAdded;
     public static event EventHandler<BlockArgs> OnTileRemoved;
+    public event EventHandler OnGridInitialised;
 
     // The world space dimensions
     private Vector3 WorldDimensions;
@@ -254,6 +260,9 @@ public class Grid3D : MonoBehaviour
         BoxCollider baseCollider = ColliderObject.AddComponent<BoxCollider>();
         baseCollider.size = new Vector3(WorldDimensions.x, 0.1f, WorldDimensions.z);
         baseCollider.center = new Vector3(transform.position.x, transform.position.y - baseCollider.size.y * 0.5f, transform.position.z);
+
+        // Everything set up
+        OnGridInitialised?.Invoke(this, EventArgs.Empty);
     }
 
     // Returns true if the world position is within the grid bounds
@@ -591,6 +600,53 @@ public class Grid3D : MonoBehaviour
         TileDimensions = new Vector3(TileSize, TileSize, TileSize);
     }
 
+    public void Save()
+    {
+        List<Vector3Int> locations = new List<Vector3Int>();
+        List<EDirection> directions = new List<EDirection>();
+        List<string> types = new List<string>();
+        List<string> colours = new List<string>();
+
+        for (int y = 0; y < Depth; ++y)
+        {
+            for (int z = 0; z < Length; ++z)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    GridObject obj = Tiles[x, y, z];
+
+                    if (obj != null)
+                    {
+                        locations.Add(obj.ObjectGridLocation);
+                        directions.Add(obj.ObjectDirection);
+                        types.Add(obj.ObjectData.ObjectName);
+
+                        IGridObject objScript = obj.Object.GetComponentInChildren<IGridObject>();
+                        colours.Add(objScript == null ? "" : objScript.Colour);
+
+                        DestroyGridObject(new Vector3Int(x, y, z));
+                    }
+                }
+            }
+        }
+
+        string data = "";
+
+        for (int i = 0; i < locations.Count; ++i)
+        {
+
+            // Add object
+            data += "PlaceObject(";
+            data += "\"" + types[i] + "\", ";
+            data += locations[i].x + ", " + locations[i].y + ", " + locations[i].z + ", ";
+            data += "EDirection." + directions[i].ToString() + ", ";
+            data += "\"" + colours[i] + "\"";
+            data += ");\n";
+        }
+
+        File.WriteAllText("Assets/Resources/Grid Saves/Test.txt", data);
+    }
+
     // Draw out a wire frame of the grid
     private void OnDrawGizmos()
     {
@@ -655,7 +711,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] blockSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int blockSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData blockData = new GridObjectData(blockSolidTable, blockSolidOffset, false, true, 1);
+        GridObjectData blockData = new GridObjectData("Block", blockSolidTable, blockSolidOffset, false, true, 1);
         Transform blockPrefab = Resources.Load<Transform>(PrefabPath + "Block");
 
         GridObjectTypes.Add("Block", new KeyValuePair<Transform, GridObjectData>(blockPrefab, blockData));
@@ -666,7 +722,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] rampSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int rampSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData rampData = new GridObjectData(rampSolidTable, rampSolidOffset, false, true, 1);
+        GridObjectData rampData = new GridObjectData("Ramp", rampSolidTable, rampSolidOffset, false, true, 1);
         Transform rampPrefab = Resources.Load<Transform>(PrefabPath + "Ramp");
 
         GridObjectTypes.Add("Ramp", new KeyValuePair<Transform, GridObjectData>(rampPrefab, rampData));
@@ -677,7 +733,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] pressurePlateSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int pressurePlateSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData pressurePlateData = new GridObjectData(pressurePlateSolidTable, pressurePlateSolidOffset, true, false, 5);
+        GridObjectData pressurePlateData = new GridObjectData("Pressure Plate", pressurePlateSolidTable, pressurePlateSolidOffset, true, false, 5);
         Transform pressurePlatePrefab = Resources.Load<Transform>(PrefabPath + "PressurePlate");
 
         GridObjectTypes.Add("Pressure Plate", new KeyValuePair<Transform, GridObjectData>(pressurePlatePrefab, pressurePlateData));
@@ -688,7 +744,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] blowerSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int blowerSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData blowerData = new GridObjectData(blowerSolidTable, blowerSolidOffset, true, false, 10);
+        GridObjectData blowerData = new GridObjectData("Blower", blowerSolidTable, blowerSolidOffset, true, false, 10);
         Transform blowerPrefab = Resources.Load<Transform>(PrefabPath + "Blower");
 
         GridObjectTypes.Add("Blower", new KeyValuePair<Transform, GridObjectData>(blowerPrefab, blowerData));
@@ -699,7 +755,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] pistonSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int pistonSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData pistonData = new GridObjectData(pistonSolidTable, pistonSolidOffset, true, false, 10);
+        GridObjectData pistonData = new GridObjectData("Piston", pistonSolidTable, pistonSolidOffset, true, false, 10);
         Transform pistonPrefab = Resources.Load<Transform>(PrefabPath + "Piston");
 
         GridObjectTypes.Add("Piston", new KeyValuePair<Transform, GridObjectData>(pistonPrefab, pistonData));
@@ -710,7 +766,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] boulderSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int boulderSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData boulderData = new GridObjectData(boulderSolidTable, boulderSolidOffset, true, false, 10);
+        GridObjectData boulderData = new GridObjectData("Boulder", boulderSolidTable, boulderSolidOffset, true, false, 10);
         Transform boulderPrefab = Resources.Load<Transform>(PrefabPath + "Boulder");
 
         GridObjectTypes.Add("Boulder", new KeyValuePair<Transform, GridObjectData>(boulderPrefab, boulderData));
@@ -721,7 +777,7 @@ public class Grid3D : MonoBehaviour
         bool[,,] mortarSolidTable = new bool[1, 1, 1] { { { true } } };
         Vector3Int mortarSolidOffset = new Vector3Int(0, 0, 0);
 
-        GridObjectData mortarData = new GridObjectData(mortarSolidTable, mortarSolidOffset, true, false, 10);
+        GridObjectData mortarData = new GridObjectData("Mortar", mortarSolidTable, mortarSolidOffset, true, false, 10);
         Transform mortarPrefab = Resources.Load<Transform>(PrefabPath + "Mortar");
 
         GridObjectTypes.Add("Mortar", new KeyValuePair<Transform, GridObjectData>(mortarPrefab, mortarData));

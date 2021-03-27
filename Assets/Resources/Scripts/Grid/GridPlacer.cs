@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public interface IGridObject
+{
+    public string Colour { get; set; }
+}
+
 public enum ERayMode
 {
     PlaceFromMouse,
@@ -54,6 +59,8 @@ public class GridPlacer : MonoBehaviour
 
         if (CanBuild && CurrentObject != "")
         {
+            if (PlaceholderData.Cost == 0) { PlaceholderData = Grid3D.GetObjectData(CurrentObject).Value; }
+
             CheckForRotation();
             CheckForPlace();
             CheckForDestroy();
@@ -98,11 +105,18 @@ public class GridPlacer : MonoBehaviour
                         GameObject placedObject = null;
                         bool successful = grid.CreateGridObject(CurrentObject, tileLoc, PlaceholderDirection, out placedObject);
 
-                        if (successful && ColourMenu.SelectedItem != -1)
+                        if (successful)
                         {
-                            // Update material to the colour selected from the radial menu
-                            Material colourMaterial = ColourEventManager.ColourMaterials[ColourMenu.SelectedSegment];
-                            UpdateAllMaterials(placedObject, "Colour (Instance)", colourMaterial); 
+                            // Set colour of that object
+                            IGridObject script = placedObject.GetComponentInChildren<IGridObject>();
+                            if (script != null) { script.Colour = ColourMenu.SelectedSegment; }
+
+                            if (ColourMenu.SelectedSegment != "")
+                            {
+                                // Update material to the colour selected from the radial menu
+                                Material colourMaterial = ColourEventManager.ColourMaterials[ColourMenu.SelectedSegment];
+                                UpdateAllMaterials(placedObject, "Colour (Instance)", colourMaterial);
+                            }
                         }
 
                         break;
@@ -168,6 +182,7 @@ public class GridPlacer : MonoBehaviour
             PlaceholderObject.rotation = Quaternion.AngleAxis((int)PlaceholderDirection * 90, Vector3.up);
             PlaceholderObject.name = CurrentObject + " (Placeholder)";
             PlaceholderObject.parent = transform;
+            
             // Make transparent
             UpdateAllMaterials(PlaceholderObject.gameObject, PlaceholderMaterial);
             CullUnnecessaryComponents(PlaceholderObject.gameObject);

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BlowerScript : MonoBehaviour
+public class BlowerScript : MonoBehaviour, IGridObject
 {
-    string Colour = "";
+    public string Colour { get; set; }
+
     [SerializeField] private LayerMask Enemies;
     public float FirePower = 500f;
     private Animator BlowerAni;
@@ -13,9 +14,8 @@ public class BlowerScript : MonoBehaviour
     private void Start()
     {
         BlowerAni = this.gameObject.GetComponentInChildren<Animator>();
-        Colour = GameObject.Find("Radial Menu - Colours").gameObject.GetComponent<RadialMenu>().SelectedSegment;
 
-        if (Colour != "")
+        if (Colour != "" && Colour != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated += BlowerScript_OnActivated;
         }
@@ -23,7 +23,7 @@ public class BlowerScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Colour != "")
+        if (Colour != "" && Colour != null && ColourEventManager.ColourEvents != null)
         {
             ColourEventManager.ColourEvents[Colour].OnActivated -= BlowerScript_OnActivated;
         }
