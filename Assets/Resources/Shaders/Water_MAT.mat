@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Linear Fog
-  m_Shader: {fileID: -6465566751694194690, guid: 8c9b03b54f484394f8d68c2757372250, type: 3}
+  m_Name: Water_MAT
+  m_Shader: {fileID: -6465566751694194690, guid: 252dca5cb3bda87439d0074a4ac6ec72, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -32,13 +32,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_21137011b655458b9e4fde9ced1d1069: -64.9
-    - Vector1_689c9efaa22a4ac38d704f850f488a14: 0
-    - Vector1_8e9ae6279e1a44738fcc06add62b9330: 598
-    - Vector1_9b505e006a8240f19f713f741d478046: 13.95
-    - Vector1_b65b4fe0fb264ac4baead29691662c23: -152.31
-    - Vector1_e68ef7d4e4124a2b823f56d538ace346: 1
-    - Vector1_fffa13c5924149b181fd7bb1945db634: 252.87
+    - Vector1_0a650fdc099143c69d1934c43fd6b7f2: 7
+    - Vector1_12d5aeee54e748b8a0f1608942e8c262: 1
+    - Vector1_5b949a3dfd2748d292931656c4f1992b: 5
     m_Colors:
-    - Color_16ffd89703534937b5ff84eb6d53b7ef: {r: 0.6084906, g: 0.887409, b: 1, a: 1}
+    - Color_69590c2e2aec4b97935299ac2a3857ad: {r: 0.19999996, g: 0.6117647, b: 0.76470596, a: 1}
+    - Color_ff2a5c1045484a739f4feb3c8ff89de3: {r: 1.011765, g: 1.709804, b: 2, a: 0}
   m_BuildTextureStacks: []
