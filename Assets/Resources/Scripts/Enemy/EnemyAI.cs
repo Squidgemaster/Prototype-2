@@ -76,6 +76,12 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        FindObjectOfType<LevelManager>().AddScore(Score);
+        FindObjectOfType<FloatingTextManager>().CreateFloatingText(RagdollRoot.position, FloatingTextType.DeathPoints, Score.ToString());
+    }
+
     // Activates the ragdolling
     public void ActivateRagdoll()
     {
@@ -89,13 +95,11 @@ public class EnemyAI : MonoBehaviour
             CJ.angularXDrive = JD;
         }
 
-        Destroy(gameObject, 10f);
-    }
+        //Destroy(gameObject, 10f);
 
-    private void OnDestroy()
-    {
-        FindObjectOfType<LevelManager>().AddScore(Score);
-        FindObjectOfType<FloatingTextManager>().CreateFloatingText(RagdollRoot.position, FloatingTextType.DeathPoints, Score.ToString());
+        // Remove animated body from ragdoll
+        Destroy(AnimationObject);
+        AnimationObjects.Clear();
     }
 
     // Apply an impulse force to ragdoll (Pelvis by default)
