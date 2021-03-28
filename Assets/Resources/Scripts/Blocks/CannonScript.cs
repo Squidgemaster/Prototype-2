@@ -11,6 +11,7 @@ public class CannonScript : MonoBehaviour, IGridObject
     List<GameObject> Enemies = new List<GameObject>();
 
     private FloatingTextManager FTM;
+    bool IsResetting = false;
 
     private void Start()
     {
@@ -25,8 +26,8 @@ public class CannonScript : MonoBehaviour, IGridObject
 
     private void LevelManager_LevelRestartEvent(object sender, System.EventArgs e)
     {
-        this.gameObject.GetComponent<SphereCollider>().enabled = true;
         Enemies.Clear();
+        this.gameObject.GetComponent<SphereCollider>().enabled = true;
     }
 
     private void OnDestroy()
@@ -42,6 +43,7 @@ public class CannonScript : MonoBehaviour, IGridObject
     private void CannonScript_OnActivated(object sender, System.EventArgs e)
     {
         Activate();
+        if (!IsResetting)
         StartCoroutine(DelayedReset());
     }
 
@@ -77,7 +79,7 @@ public class CannonScript : MonoBehaviour, IGridObject
                 FTM.CreateFloatingText(Enemies[i].GetComponentInParent<EnemyAI>().RagdollRigidbodies[0].position, FloatingTextType.Normal, "+ 25");
                 // ---------------------------------------------------
 
-                Enemies.Remove(Enemies[i]);
+                Enemies.Clear();
             }
             else if (Enemies[i] != null && Enemies[i].gameObject.tag == "Boulder")
             {
@@ -85,7 +87,7 @@ public class CannonScript : MonoBehaviour, IGridObject
                 body.velocity = Vector3.zero;
                 body.AddForce((transform.forward + transform.up) * FirePower, ForceMode.Impulse);
 
-                Enemies.Remove(Enemies[i]);
+                Enemies.Clear();
             }
         }
     }
@@ -93,11 +95,13 @@ public class CannonScript : MonoBehaviour, IGridObject
     private void Deactivate()
     {
         this.gameObject.GetComponent<SphereCollider>().enabled = true;
+        IsResetting = false;
     }
 
     private IEnumerator DelayedReset()
     {
-        yield return new WaitForSeconds(1f);
+        IsResetting = true;
+        yield return new WaitForSeconds(0.5f);
         Deactivate();
     }
     private void OnTriggerEnter(Collider other)
