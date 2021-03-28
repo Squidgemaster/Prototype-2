@@ -42,9 +42,12 @@ public class CannonScript : MonoBehaviour, IGridObject
 
     private void CannonScript_OnActivated(object sender, System.EventArgs e)
     {
-        Activate();
-        if (!IsResetting)
-        StartCoroutine(DelayedReset());
+        if (Enemies.Count > 0)
+        {
+            Activate();
+            if (!IsResetting)
+                StartCoroutine(DelayedReset());
+        }
     }
 
     private void Activate()
