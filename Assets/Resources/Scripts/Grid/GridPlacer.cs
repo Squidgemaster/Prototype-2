@@ -29,6 +29,10 @@ public class GridPlacer : MonoBehaviour
     [Header("Visuals")]
     public Material PlaceholderMaterial;
 
+    [Header("Audio")]
+    public AudioClip Plonk;
+    private AudioSource AS;
+
     // Don't touch
     private Camera MainCamera;
     private Grid3D[] Grids;
@@ -48,6 +52,9 @@ public class GridPlacer : MonoBehaviour
         // Find the camera in the level
         MainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         if (MainCamera == null) { Debug.LogError("Grid Error: Camera must have 'MainCamera' tag"); }
+
+        // Get audiosource
+        AS = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -109,6 +116,8 @@ public class GridPlacer : MonoBehaviour
                         {
                             // Set colour of that object
                             IGridObject script = placedObject.GetComponentInChildren<IGridObject>();
+                            AS.PlayOneShot(Plonk);
+
                             if (script != null) { script.Colour = ColourMenu.SelectedSegment; }
 
                             if (ColourMenu.SelectedSegment != "")

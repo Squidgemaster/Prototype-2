@@ -20,12 +20,14 @@ public struct FloatingTextData
 public class FloatingTextManager : MonoBehaviour
 {
     public GameObject FloatingTextPrefab;
+    public AudioClip Point;
 
     private Dictionary<FloatingTextType, FloatingTextData> FloatingTextDatas;
 
     private Camera MainCamera;
     private List<Transform> FloatingTexts;
     private Transform ParentFloatingTexts;
+    private AudioSource AS;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +39,8 @@ public class FloatingTextManager : MonoBehaviour
 
         FloatingTexts = new List<Transform>();
         MainCamera = Camera.main;
+
+        AS = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -96,6 +100,9 @@ public class FloatingTextManager : MonoBehaviour
 
         // Destroy once animation is complete
         Destroy(parent, anim.GetCurrentAnimatorClipInfo(0)[0].clip.length);
+
+        // Play sound
+        AS.PlayOneShot(Point);
     }
 
     private void GenerateTextTypes()
