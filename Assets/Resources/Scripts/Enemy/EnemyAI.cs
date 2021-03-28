@@ -95,7 +95,7 @@ public class EnemyAI : MonoBehaviour
             CJ.angularXDrive = JD;
         }
 
-        //Destroy(gameObject, 10f);
+        Destroy(gameObject, 15f);
 
         // Remove animated body from ragdoll
         Destroy(AnimationObject);
